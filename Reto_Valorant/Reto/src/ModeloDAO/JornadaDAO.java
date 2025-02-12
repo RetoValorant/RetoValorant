@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class JornadaDAO {
     private static ArrayList<Jornada> jornadas;
+
     public static void anadirJornada(Jornada j) {
         try {
             jornadas.add(j);
