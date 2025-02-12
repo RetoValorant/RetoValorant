@@ -1,63 +1,95 @@
+
+
 package ModeloController;
 
 import Modelo.Equipo;
-import Modelo.Jugador;
 import ModeloDAO.EquipoDAO;
-
 import java.time.LocalDate;
-import java.util.List;
+import java.time.format.DateTimeParseException;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import javax.swing.JOptionPane;
 
 public class EquipoController {
 
-    private EquipoDAO equipoDAO;
+    public static EquipoDAO eDAO;
+    private static final LocalDate FECHAFUNDACION = LocalDate.of(2020, 6, 2); //fecha fundacion Valorant
 
     public EquipoController() {
-        this.equipoDAO = new EquipoDAO();
+        eDAO = new EquipoDAO();
     }
 
-    public boolean validarNombre(String nombre) {
-        return nombre != null && !nombre.trim().isEmpty() && nombre.matches("^[A-Za-zÀ-ÿ\\s]{3,30}$");
+    public void validarDatosEquipo() {
+        Equipo equ = new Equipo();
+            equ.setNombre(this.validarDato());
+            equ.setCodEquipo(this.generarCodEquipo());
+            equ.setFechaFundacion(this.validarFechaFundacion());
+        eDAO.crearEquipo(equ);
     }
+    private String validarDato() {
+        String var = "";
+        boolean isFinished = false;
+        Pattern p = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9 _-]{3,15}[a-zA-Z0-9]$"); //15 como mucho como en MER/MR
 
-    public boolean validarFechaFundacion(LocalDate fecha) {
-        return fecha != null && !fecha.isAfter(LocalDate.now());
-    }
+        do {
+            try {
+                var = JOptionPane.showInputDialog(null, "Ingrese el nombre del equipo");
+                Matcher matcher = p.matcher(var);
 
-    public boolean validarJugador(Jugador jugador) {
-        return jugador != null && jugador.getNombre() != null && validarNombre(jugador.getNombre());
-    }
-
-    public String generarCodEquipo() {
-        List<Equipo> equipos = equipoDAO.obtenerTodosLosEquipos();
-        if (equipos.isEmpty()) {
-            return "EQ001";
-        } else {
-            int maxCod = 0;
-            for (Equipo equipo : equipos) {
-                int cod = Integer.parseInt(equipo.getCodEquipo().substring(2));
-                if (cod > maxCod) {
-                    maxCod = cod;
+                if (var.trim().isBlank()){
+                    JOptionPane.showMessageDialog(null, "El nombre del equipo no puede ser nulo");
+                } else if (matcher.matches()) {
+                    isFinished = true;
+                }else {
+                    JOptionPane.showMessageDialog(null, var + " tiene un patron inválido");
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("No se acepta ese formato para el nombre del equipo");
+            } catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(null, "Nombre" + " no puede ser nulo");
             }
-            return String.format("EQ%03d", maxCod + 1);
+        } while(!isFinished);
+
+        return var;
+    }
+    private int generarCodEquipo() {
+        Set<Integer> codigosEquipo = eDAO.obtenerTodosLosEquipos()
+                                            .stream().map(Equipo::getCodEquipo)
+                                                    .collect(Collectors.toSet());
+
+        int codEquipo = 0;
+        while (codigosEquipo.contains(codEquipo)) {
+            codEquipo++;
+            //hasta que no encuentra un nuevo codigo no sale del loop
         }
+        return codEquipo;
+    }
+    private LocalDate validarFechaFundacion() {
+        boolean validFecha = false;
+        LocalDate fechaPars = null;
+        String fechaNOpars = "";
+        do {
+            try {
+                fechaNOpars = JOptionPane.showInputDialog(null, "Ingrese la fehca de fundacion del equipo");
+                if (fechaNOpars.isBlank()) {
+                    JOptionPane.showMessageDialog(null, "la fecha no puede estar vacia");
+                } else {
+                    fechaPars = LocalDate.parse(fechaNOpars);
+                    if (fechaPars.isBefore(FECHAFUNDACION)) {
+                        JOptionPane.showMessageDialog(null, "La fecha de fundacion no puede ser anterior al año de creacion del juego");
+                    }
+                    validFecha = true;
+                }
+            } catch (NumberFormatException | DateTimeParseException e) {
+                System.out.println(fechaNOpars + " error al parsear la fecha : " +e.getMessage());
+            } catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(null, fechaNOpars + " no puede ser nulo");
+            }
+        } while(!validFecha);
+
+        return fechaPars;
     }
 
-    public void agregarEquipo(Equipo equipo) {
-        String codEquipo = generarCodEquipo();
-        equipo.setCodEquipo(codEquipo);
-        equipoDAO.crearEquipo(equipo);
-    }
-
-    public Equipo buscarEquipoPorCodigo(String codEquipo) {
-        return equipoDAO.obtenerEquipoPorCodigo(codEquipo);
-    }
-
-    public void actualizarEquipo(Equipo equipo) {
-        equipoDAO.actualizarEquipo(equipo);
-    }
-
-    public void eliminarEquipo(String codEquipo) {
-        equipoDAO.eliminarEquipo(codEquipo);
-    }
 }

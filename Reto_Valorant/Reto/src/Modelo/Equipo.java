@@ -6,12 +6,12 @@ import java.util.ArrayList;
 
 public class Equipo {
 
-    private String codEquipo; // Código único del equipo (ej: EQ001)
+    private int codEquipo; // Código único del equipo (ej: EQ001)
+    private int puntuacion; // Puntuación actual del equipo
+    private int contJugadores;
     private String nombre; // Nombre del equipo
     private LocalDate fechaFundacion; // Fecha de fundación del equipo
-    private int puntuacion; // Puntuación actual del equipo
     private ArrayList<Jugador> listaJugadores; // Lista de jugadores del equipo
-
     /*
       Constructor sin argumentos. Inicializa la lista de jugadores.
      */
@@ -20,15 +20,23 @@ public class Equipo {
     }
 
 
-    public Equipo(String codEquipo, String nombre, LocalDate fechaFundacion, int puntuacion) {
+    public Equipo(int codEquipo, String nombre, LocalDate fechaFundacion, int puntuacion) {
         this.codEquipo = codEquipo;
         this.nombre = nombre;
         this.fechaFundacion = fechaFundacion;
         this.puntuacion = puntuacion;
+        this.contJugadores = 0;
     }
 
+    public int getContJugadores() {
+        return contJugadores;
+    }
 
-    public Equipo(String codEquipo, String nombre, LocalDate fechaFundacion, int puntuacion, ArrayList<Jugador> listaJugadores) {
+    public void setContJugadores(int contJugadores) {
+        this.contJugadores = contJugadores;
+    }
+
+    public Equipo(int codEquipo, String nombre, LocalDate fechaFundacion, int puntuacion, ArrayList<Jugador> listaJugadores) {
         this.codEquipo = codEquipo;
         this.nombre = nombre;
         this.fechaFundacion = fechaFundacion;
@@ -38,11 +46,11 @@ public class Equipo {
 
     // Getters y setters
 
-    public String getCodEquipo() {
+    public int getCodEquipo() {
         return codEquipo;
     }
 
-    public void setCodEquipo(String codEquipo) {
+    public void setCodEquipo(int codEquipo) {
         this.codEquipo = codEquipo;
     }
 

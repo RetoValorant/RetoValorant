@@ -7,12 +7,10 @@ import java.util.ArrayList;
 public class JornadaDAO {
     private ArrayList<Jornada> jornadas;
     public void anadirJornada(Jornada j) {
-        try {
-            jornadas.add(j);
-        }catch(NullPointerException e) {
+        if (jornadas == null) {
             jornadas = new ArrayList<>();
-            jornadas.add(j);
         }
+            jornadas.add(j);
     }
     public ArrayList<Jornada> getJornadas() {
         return jornadas;

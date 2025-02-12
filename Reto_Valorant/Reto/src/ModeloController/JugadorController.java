@@ -1,41 +1,47 @@
 package ModeloController;
 
+import Modelo.Equipo;
 import Modelo.Jugador;
+import ModeloDAO.EquipoDAO;
+import ModeloDAO.JugadorDAO;
 import Nacionalidades.Country;
 
-import java.security.spec.RSAPrivateCrtKeySpec;
-import java.util.Scanner;
-import java.util.Vector;
-import java.util.concurrent.Callable;
+import javax.swing.*;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class JugadorController {
-    public static Jugador jugador;
+import static java.util.stream.Collectors.*;
 
+public class JugadorController {
+    public static JugadorDAO jugadorDAO;
+    private static EquipoDAO equipoDAO;
 
     public JugadorController() {
-        jugador = new Jugador();
+        equipoDAO = new EquipoDAO();
+        jugadorDAO = new JugadorDAO();
     }
+
     public void dataValidation(){
         Jugador j = new Jugador();
-        //j.setCodJugador() podemos autogenerarlo o teclear??
-
-        j.setNombre(this.validarNomApeNik("Nombre","Ingresa el nombre del jugador","^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ]+ [a-zA-ZñÑáéíóúÁÉÍÓÚüÜ]+$"));
-        j.setApellido(this.validarNomApeNik("Apellido","Ingresa el apellido del jugador","^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ]+ [a-zA-ZñÑáéíóúÁÉÍÓÚüÜ]+$"));
-        j.setNacionalidad(this.validarNacionalidad("Nacionalidad","En que pais nacio el jugador?","[a-zA-ZñÑ]+ [a-zA-ZñÑ]+$]"));
+            j.setCodJugador(generarCodJugador());
+            j.setNombre(this.validarNomApeNik("Nombre","Ingresa el nombre del jugador"));
+            j.setApellido(this.validarNomApeNik("Apellido","Ingresa el apellido del jugador"));
+            j.setNacionalidad(this.validarNacionalidad());
+            j.setEquipo(this.validarEquipos());
+            //Si este metodo devuelve null hay que dar una opcion de modificar jugador para dar de alta en un equipo
+        jugadorDAO.agregar(j);
     }
 
-    public String validarNomApeNik(String dato,String msj,String pat){
-        Scanner sc = new Scanner(System.in);
+    private String validarNomApeNik(String dato,String msj){
         boolean isValid = false;
-        Pattern pattern = Pattern.compile(pat);
+        Pattern pattern = Pattern.compile("^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ]+ [a-zA-ZñÑáéíóúÁÉÍÓÚüÜ]+$");
         String var="";
         do {
             try {
-                System.out.println(msj);
-                var = sc.nextLine();
+                var = JOptionPane.showInputDialog(null,msj);
                 Matcher matcher = pattern.matcher(var);
+
                 if (matcher.matches()) {
                     isValid = true;
                 }else {
@@ -43,41 +49,39 @@ public class JugadorController {
                 }
 
             }catch (NullPointerException e){
-                System.out.println("No se puede ingresar el" + dato + "vacio");
+                System.out.println("No se puede ingresar el " + dato + " vacio");
             }
         }while (!isValid);
-        sc.close();
         return var;
     }
-    public String validarNacionalidad(String dato,String msj,String pat){
-        Scanner sc = new Scanner(System.in);
+    private String validarNacionalidad(){
         boolean isValid = false;
-        Pattern pattern = Pattern.compile(pat);
+        Pattern pattern = Pattern.compile("^[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]+(?:-[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]+)*(?: [A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]+(?:-[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]+)*)*$");
+        //generado por ChatGPT
         String var="";
         do {
             try {
-                System.out.println(msj);
-                var = sc.nextLine();
+                var= JOptionPane.showInputDialog(null,"En que pais nacio el jugador?");
                 Matcher matcher = pattern.matcher(var);
+
                 if (matcher.matches()) {
                     var = getCodigoOSI(var);
                     if (var == null) {
-                        System.out.println(dato + " No es correcta");
+                        System.out.println("Nacionalidad no encontrada");
                     }else {
                         isValid = true;
                     }
                 }else {
-                    System.out.println(dato + " no utiliza un formato valido");
+                    System.out.println("Nacionalidad no utiliza un formato valido");
                 }
 
             }catch (NullPointerException e){
-                System.out.println("No se puede ingresar el" + dato + "vacio");
+                System.out.println("No se puede ingresar el" + "Nacionalidad" + "vacio");
             }
         }while (!isValid);
-        sc.close();
         return var;
     }
-    public static String getCodigoOSI(String nombrePais) {
+    private String getCodigoOSI(String nombrePais) {
         for (Country pais : Country.values()) {
             if (pais.getName().equalsIgnoreCase(nombrePais)) {
                 return pais.getThreeDigitsCode();
@@ -86,4 +90,45 @@ public class JugadorController {
         }
         return null; //en caso de no encontrar devuelve null
     }
+    private int generarCodJugador(){
+        Set<Integer> codExistentes = jugadorDAO.obtenerTodos() .stream().map(Jugador::getCodJugador).collect(toSet());
+        //recoge todos los codigos de los jugadores
+
+        int codJugador = 0;
+        while (codExistentes.contains(codJugador)) {
+            codJugador++;
+            //hasta que no sea mas grande el nuevo codigo, no sale del bucle
+        }
+        return codJugador;
+    }
+
+    private Optional<Equipo> validarEquipos() {
+        List<Equipo> equiposDisponibles = equipoDAO.obtenerTodosLosEquipos();
+
+        if (equiposDisponibles.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se puede ingresar el equipo porque no existe");
+            return Optional.empty();
+        }
+
+        String nombre = (String) JOptionPane.showInputDialog(
+                null,
+                "Selecciona el equipo al que pertenece el Jugador",
+                "Opciones",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                equiposDisponibles.stream().map(Equipo::getNombre).toArray(String[]::new),
+                equiposDisponibles.getFirst().getNombre()
+        );
+
+        if (nombre == null) {
+            JOptionPane.showMessageDialog(null, "No se seleccionó ningún equipo");
+            return Optional.empty();
+        }else {
+            return equiposDisponibles.stream()
+                    .filter(e -> e.getNombre().equals(nombre))
+                    .findFirst();
+        }
+
+    }
+
 }
