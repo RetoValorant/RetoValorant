@@ -1,6 +1,7 @@
 package Modelo;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class Jugador {
     private int codJugador;
@@ -43,7 +44,7 @@ public class Jugador {
         return equipo;
     }
 
-    public void setEquipo(Equipo equipo) {
+    public void setEquipo(Optional<Equipo> equipo) {
         this.equipo = equipo;
     }
 

@@ -3,6 +3,7 @@ package ModeloDAO;
 import Modelo.Equipo;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EquipoDAO {
 
@@ -12,43 +13,26 @@ public class EquipoDAO {
         this.listaEquipos = new ArrayList<>();
     }
 
-    public void crearEquipo(Equipo equipo) {
-        listaEquipos.add(equipo);
-        System.out.println("Equipo agregado.");
+    public void crearEquipo(Equipo e) {
+        listaEquipos.add(e);
     }
 
     public List<Equipo> obtenerTodosLosEquipos() {
-        return listaEquipos;
+        return new ArrayList<>(listaEquipos);
+        //Devuelve un ArrayList nuevo para la seguridad de datos
     }
-
-    public Equipo obtenerEquipoPorCodigo(String codEquipo) {
-        for (Equipo equipo : listaEquipos) {
-            if (equipo.getCodEquipo().equalsIgnoreCase(codEquipo)) {
-                return equipo;
-            }
-        }
-        return null;
+    public Optional<Equipo> obtenerEquipoPorCodigo(int codEquipo) {
+        return listaEquipos.stream()
+                .filter(e -> e.getCodEquipo() == codEquipo)
+                .findFirst();
     }
-
-    public void actualizarEquipo(Equipo equipo) {
-        for (int i = 0; i < listaEquipos.size(); i++) {
-            if (listaEquipos.get(i).getCodEquipo().equalsIgnoreCase(equipo.getCodEquipo())) {
-                listaEquipos.set(i, equipo);
-                System.out.println("Equipo actualizado.");
-                return; // No es necesario seguir buscando
-            }
-        }
-        System.out.println("Equipo no encontrado.");
+    public void actualizarEquipo(Equipo nuevoEquipo) {
+        listaEquipos.replaceAll(e -> e.getCodEquipo() == nuevoEquipo.getCodEquipo() ? nuevoEquipo: e);
+            //si e.getCodEquipo == nuevoEquipo.getCodEquipo, sustituimos, si no, dejamos a 'e' igual
     }
-
-    public void eliminarEquipo(String codEquipo) {
-        for (int i = 0; i < listaEquipos.size(); i++) {
-            if (listaEquipos.get(i).getCodEquipo().equalsIgnoreCase(codEquipo)) {
-                listaEquipos.remove(i);
-                System.out.println("Equipo eliminado.");
-                return; // No es necesario seguir buscando
-            }
-        }
-        System.out.println("Equipo no encontrado.");
+    public boolean eliminarEquipo(int codEquipo) {
+        return listaEquipos.removeIf(e -> e.getCodEquipo() == codEquipo);
+        //quita el equipo en caso de encontrarlo por su codigo
+        //devuelve boolean para confirmar en Controller
     }
 }

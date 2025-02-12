@@ -1,5 +1,11 @@
+package ModeloDAO;
+
+import Modelo.Jugador;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class JugadorDAO {
 
@@ -16,45 +22,29 @@ public class JugadorDAO {
         }
 
 
-        public void modificar(String codJugador, Jugador nuevoJugador) {
-            for (int i = 0; i < jugadores.size(); i++) {
-                Jugador jugador = jugadores.get(i);
-                if (jugador.getCodJugador().equals(codJugador)) {
-                    jugadores.set(i, nuevoJugador); // Reemplaza el jugador viejo por el nuevo
-                    return;
-                }
-            }
-        }
-
-
-        public void eliminar(String codJugador) {
-            jugadores.removeIf(jugador -> jugador.getCodJugador().equals(codJugador));
-        }
-
-
-        public List<Jugador> obtenerTodos() {
+        public List<Jugador> obtenerTodos(){
             return new ArrayList<>(jugadores);
         }
 
+        public void modificar(String codJugador, Jugador nuevoJugador) {
+            jugadores.replaceAll(j -> j.getCodJugador() == nuevoJugador.getCodJugador() ? nuevoJugador : j);
+        }
 
-        public Jugador obtenerPorCodigo(String codJugador) {
-            for (Jugador jugador : jugadores) {
-                if (jugador.getCodJugador().equals(codJugador)) {
-                    return jugador;
-                }
-            }
-            return null;
+
+        public boolean eliminar(int codJugador) {
+            return jugadores.removeIf(j -> j.getCodJugador() == codJugador);
+        }
+
+
+        public Optional<Jugador> obtenerPorCodigo(int codJugador) {
+            return jugadores.stream().filter(j -> j.getCodJugador() == codJugador).findFirst();
         }
 
 
         public List<Jugador> obtenerPorEquipo(int codEquipo) {
-            List<Jugador> jugadoresEquipo = new ArrayList<>();
-            for (Jugador jugador : jugadores) {
-                if (jugador.getEquipo().getCodEquipo() == codEquipo) {
-                    jugadoresEquipo.add(jugador);
-                }
-            }
-            return jugadoresEquipo;
+            return jugadores.stream().filter(j -> j.getEquipo().getCodEquipo() == codEquipo).toList();
+            //obtiene los jugadores por Equipo con codigo coincidente y los añade a 'jugadores'
+
         }
 
 

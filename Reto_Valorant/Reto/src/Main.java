@@ -51,25 +51,26 @@ public class Main {
                                 10. Añadir un resultado a un enfrentamiento.
                                 11. Ver la puntuacion de un equipo.
                                 """;
-        tipos[0] = "jugador";
-        tipos[1] = "equipo";
-        tipos[2] = "jornada";
-        tipos[3] = "enfrentamiento";
     }
+
     public static void opcionesSinJornadas() {
         Scanner sc = new Scanner(System.in);
-        boolean yes;
+        boolean yes=false;
         do {
             System.out.println(opcionesSinJornadas);
             int opcion = sc.nextInt();
             switch (opcion) {
-                default:
+                case 1 -> jugadorController.dataValidation();
+                case 2 -> equipoController.validarDatosEquipo();
+                default -> {
                     yes = jornadaController.validarCreacionJornada();
                     enfrentamientoController.crearEnfrentamientos();
-                    break;
+                }
             }
         }while(yes);
     }
+
+    /*
     public static void opcionesConJornadas() {
         Scanner sc = new Scanner(System.in);
         boolean yes = true;
@@ -82,4 +83,5 @@ public class Main {
             }
         }while(yes);
     }
+    */
 }
