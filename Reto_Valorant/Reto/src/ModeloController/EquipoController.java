@@ -16,7 +16,7 @@ public class EquipoController {
     }
 
 
-    // Validar el nombre del equipoo
+    // Validar el nombre del equipo
 
     public boolean validarNombre(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()) {
