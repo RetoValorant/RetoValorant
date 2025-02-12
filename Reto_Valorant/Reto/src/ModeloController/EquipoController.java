@@ -19,6 +19,9 @@ public class EquipoController {
         eDAO = new EquipoDAO();
     }
 
+    public EquipoController() {
+    }
+
     /*validaciones :
 
     *   Fecha Inscripcion

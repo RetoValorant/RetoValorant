@@ -36,12 +36,20 @@ public class Main {
                                 9. Ver informacion de un jugador en concreto.
                                 10. Ver informacion de un equipo en concreto.
                                 11. Ver los jugadores de un equipo.
+                                12. Crear las jornadas.
                                 """;
         opcionesConJornadas = """
-                                12. Ver los enfrentamientos de una jornada.
-                                13. Ver los enfrentamientos de un equipo.
-                                14. Añadir un resultado a un enfrentamiento. 
-                                15. Ver la puntuacion de un equipo.
+                                1. Modificar un Jugador.
+                                2. Modificar un Equipo.
+                                3. Ver todos los jugadores.
+                                4. Ver todos los equipos.
+                                5. Ver informacion de un jugador en concreto.
+                                6. Ver informacion de un equipo en concreto.
+                                7. Ver los jugadores de un equipo.
+                                8. Ver los enfrentamientos de una jornada.
+                                9. Ver los enfrentamientos de un equipo.
+                                10. Añadir un resultado a un enfrentamiento.
+                                11. Ver la puntuacion de un equipo.
                                 """;
         tipos[0] = "jugador";
         tipos[1] = "equipo";

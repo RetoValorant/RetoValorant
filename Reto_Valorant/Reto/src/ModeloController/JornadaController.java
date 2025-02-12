@@ -12,6 +12,10 @@ public class JornadaController {
     private static Jornada jornada;
     private static JornadaDAO jornadaDAO;
     private static final int[] meses31 = {1,3,5,7,8,10,12};
+    public boolean validarCreacionJornada(){
+        crearJornada();
+        return true;
+    }
     public void crearJornada(){
         /*
         ArrayList<Equipo> equipos = EquipoDAO.VerEquipos();
