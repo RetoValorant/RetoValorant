@@ -12,7 +12,6 @@ public class Main {
     public static EnfrentamientoController enfrentamientoController;
     public static String opcionesSinJornadas;
     public static String opcionesConJornadas;
-    public static String[] tipos = new String[4];
 
     public static void main(String[] args) {
         declararVariables();
@@ -70,7 +69,6 @@ public class Main {
         }while(yes);
     }
 
-    /*
     public static void opcionesConJornadas() {
         Scanner sc = new Scanner(System.in);
         boolean yes = true;
@@ -83,5 +81,4 @@ public class Main {
             }
         }while(yes);
     }
-    */
 }
