@@ -5,7 +5,7 @@ import Modelo.Jugador;
 import ModeloDAO.EquipoDAO;
 
 import java.time.LocalDate;
-import java.util.regex.Pattern;
+import java.util.List;
 
 public class EquipoController {
 
@@ -15,51 +15,47 @@ public class EquipoController {
         this.equipoDAO = new EquipoDAO();
     }
 
-
-    // Validar el nombre del equipo
-
     public boolean validarNombre(String nombre) {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            return false;
-        }
-        return Pattern.matches("^[A-Za-zÀ-ÿ\\s]{3,30}$", nombre);
+        return nombre != null && !nombre.trim().isEmpty() && nombre.matches("^[A-Za-zÀ-ÿ\\s]{3,30}$");
     }
-
-
-    // Validar fecha de fundacion
 
     public boolean validarFechaFundacion(LocalDate fecha) {
         return fecha != null && !fecha.isAfter(LocalDate.now());
     }
 
-    // Validar jugador
-
     public boolean validarJugador(Jugador jugador) {
-        if (jugador == null || jugador.getNombre() == null) {
-            return false;
-        }
-        return validarNombre(jugador.getNombre());
+        return jugador != null && jugador.getNombre() != null && validarNombre(jugador.getNombre());
     }
 
-    // Agregar equipo
+    public String generarCodEquipo() {
+        List<Equipo> equipos = equipoDAO.obtenerTodosLosEquipos();
+        if (equipos.isEmpty()) {
+            return "EQ001";
+        } else {
+            int maxCod = 0;
+            for (Equipo equipo : equipos) {
+                int cod = Integer.parseInt(equipo.getCodEquipo().substring(2));
+                if (cod > maxCod) {
+                    maxCod = cod;
+                }
+            }
+            return String.format("EQ%03d", maxCod + 1);
+        }
+    }
 
     public void agregarEquipo(Equipo equipo) {
+        String codEquipo = generarCodEquipo();
+        equipo.setCodEquipo(codEquipo);
         equipoDAO.crearEquipo(equipo);
     }
-
-    // Buscar equipo por codigo
 
     public Equipo buscarEquipoPorCodigo(String codEquipo) {
         return equipoDAO.obtenerEquipoPorCodigo(codEquipo);
     }
 
-    // Actualizar o modificar un equipo
-
     public void actualizarEquipo(Equipo equipo) {
         equipoDAO.actualizarEquipo(equipo);
     }
-
-    // Eliminar un equipo
 
     public void eliminarEquipo(String codEquipo) {
         equipoDAO.eliminarEquipo(codEquipo);
