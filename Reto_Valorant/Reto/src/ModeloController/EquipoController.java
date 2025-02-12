@@ -1,94 +1,63 @@
 package ModeloController;
 
 import Modelo.Equipo;
+import Modelo.Jugador;
 import ModeloDAO.EquipoDAO;
 
-import javax.swing.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 public class EquipoController {
-    public static Equipo equipo;
-    public static EquipoDAO eDAO;
 
-    public EquipoController(Equipo equipo){
-        equipo = new Equipo();
-        eDAO = new EquipoDAO();
-    }
+    private EquipoDAO equipoDAO;
 
     public EquipoController() {
+        this.equipoDAO = new EquipoDAO();
     }
 
-    /*validaciones :
-
-    *   Fecha Inscripcion
-    *   numJugadores
-    *   codEquipos
-    *   Datos varios
-
-    */
-    public Equipo validarDatosEquipo(){
-        Equipo equ = new Equipo();
-            equ.setNombre(this.validarDato("Nombre","Ingrese el nombre del equipo","[a-zA-Z0-9_- ]+"));
-            equ.setCodEquipo(this.generarCodEquipo(0));
-            equ.setFechaFundacion(this.validarFechaFundacion("Fecha","Ingrese la fehca de fundacion del equipo",""));
-        return equ;
+    public boolean validarNombre(String nombre) {
+        return nombre != null && !nombre.trim().isEmpty() && nombre.matches("^[A-Za-zÀ-ÿ\\s]{3,30}$");
     }
 
-    public String validarDato(String dato,String msj,String patron){
-        String var="";
-        boolean isFinished=false;
-        Pattern p = Pattern.compile(patron);
-        do {
-            try {
-                var = JOptionPane.showInputDialog(msj);
+    public boolean validarFechaFundacion(LocalDate fecha) {
+        return fecha != null && !fecha.isAfter(LocalDate.now());
+    }
 
-                Matcher matcher = p.matcher(var);
-                if (var.isBlank()){
-                    JOptionPane.showMessageDialog(null,dato + " no puede ser nulo");
-                }else if (matcher.matches()){
-                    isFinished=true; //sale de la repetitiva xq es correcto
+    public boolean validarJugador(Jugador jugador) {
+        return jugador != null && jugador.getNombre() != null && validarNombre(jugador.getNombre());
+    }
+
+    public String generarCodEquipo() {
+        List<Equipo> equipos = equipoDAO.obtenerTodosLosEquipos();
+        if (equipos.isEmpty()) {
+            return "EQ001";
+        } else {
+            int maxCod = 0;
+            for (Equipo equipo : equipos) {
+                int cod = Integer.parseInt(equipo.getCodEquipo().substring(2));
+                if (cod > maxCod) {
+                    maxCod = cod;
                 }
-            }catch (NumberFormatException e){
-                System.out.println("No se acepta ese formato para " + dato);
             }
-        }while (!isFinished);
-        return var;
-    }
-
-    public int generarCodEquipo(int codEquipo) {
-        while (eDAO.readCodEquipo(codEquipo) != null) {
-            //itera sobre DAO hasta econtrar un 'hueco vacio', cuando lo hace lo retorna(asignado)
-            codEquipo++;
+            return String.format("EQ%03d", maxCod + 1);
         }
-        return codEquipo;
     }
 
-    public LocalDate validarFechaFundacion(String dato,String msj,String fechaNOpars){
-        boolean validFecha=false;
-        LocalDate fechaPars=null; LocalDate fechaFund = LocalDate.of(2020,6,2);
-        do {
-            try {
-                fechaNOpars = JOptionPane.showInputDialog(null,msj);
-                if (fechaNOpars.isBlank()){
-                    JOptionPane.showMessageDialog(null,"la fecha no puede estar vacia");
-                }else{
-                    fechaPars = LocalDate.parse(fechaNOpars); //se va a dejar como fecha anglosajona para posterior SQL
-                    if (fechaPars.isBefore(fechaFund)){
-                        JOptionPane.showMessageDialog(null,"La fecha de fundacion no puede ser anterior al año de creacion del juego");
-                    }
-                    validFecha=true;
-                }
-            }catch (DateTimeParseException | NumberFormatException e){
-                System.out.println(fechaNOpars + " error al parsear la fecha : " + e.getMessage());
-            }
-        }while (!validFecha);
-        return fechaPars;
+    public void agregarEquipo(Equipo equipo) {
+        String codEquipo = generarCodEquipo();
+        equipo.setCodEquipo(codEquipo);
+        equipoDAO.crearEquipo(equipo);
     }
 
+    public Equipo buscarEquipoPorCodigo(String codEquipo) {
+        return equipoDAO.obtenerEquipoPorCodigo(codEquipo);
+    }
 
+    public void actualizarEquipo(Equipo equipo) {
+        equipoDAO.actualizarEquipo(equipo);
+    }
 
+    public void eliminarEquipo(String codEquipo) {
+        equipoDAO.eliminarEquipo(codEquipo);
+    }
 }
