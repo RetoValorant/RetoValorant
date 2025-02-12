@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.*;
 public class JugadorController {
 
     //Mejorada la validacion de si se puede crear el jugador, añadido nickname, fechaNac y sueldo.
+    //Añadida la validacion de maximo 6 jugadores por equipo.
 
 
     private static JugadorDAO jugadorDAO;
@@ -30,8 +31,8 @@ public class JugadorController {
     }
 
     public void dataValidation(){
-        declararVariables();
-        if (validarCreacion()) {
+        this.declararVariables();
+        if (this.validarCreacion()) {
             Jugador j = new Jugador();
             j.setCodJugador(this.generarCodJugador());
             j.setNombre(this.validarNomApeNik("Nombre", "Ingresa el nombre del jugador."));
@@ -160,9 +161,7 @@ public class JugadorController {
         }while (!isValid);
         return sueldo;
     }
-
     private Optional<Equipo> validarEquipos() {
-
         String nombre = (String) JOptionPane.showInputDialog(
                 null,
                 "Selecciona el equipo al que pertenece el Jugador",
@@ -172,15 +171,37 @@ public class JugadorController {
                 equipos.stream().map(Equipo::getNombre).toArray(String[]::new),
                 equipos.getFirst().getNombre()
         );
-
-        if (nombre == null) {
-            JOptionPane.showMessageDialog(null, "No se seleccionó ningún equipo");
-            return Optional.empty();
-        }else {
-            return equipos.stream()
-                    .filter(e -> e.getNombre().equals(nombre))
-                    .findFirst();
+            if (nombre == null) {
+                JOptionPane.showMessageDialog(null, "No se seleccionó ningún equipo");
+                return Optional.empty();
+            } else {
+                if (validarAnadirEquipo(nombre)) {
+                    return equipos.stream()
+                        .filter(e -> e.getNombre().equals(nombre))
+                        .findFirst();
+                }else {
+                    return Optional.empty();
+                }
+            }
+    }
+    private boolean validarAnadirEquipo(String nombre) {
+        Equipo equipoEncontrado = null;
+        for (Equipo equipo : equipos) {
+            if (equipo.getNombre().equals(nombre)) {
+                equipoEncontrado = equipo;
+                break;
+            }
         }
-
+        if (equipoEncontrado != null) {
+            if (equipoEncontrado.getListaJugadores().size() <= 6)
+                return true;
+            else{
+                JOptionPane.showMessageDialog(null,"El equipo ya tiene 6 jugadores, no puede tener mas jugadores.");
+                return false;
+            }
+        }else {
+            JOptionPane.showMessageDialog(null,"El equipo no existe.");
+            return false;
+        }
     }
 }

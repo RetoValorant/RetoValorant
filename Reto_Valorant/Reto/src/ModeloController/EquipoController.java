@@ -15,7 +15,8 @@ import javax.swing.JOptionPane;
 public class EquipoController {
 
     public static EquipoDAO eDAO;
-    private static final LocalDate FECHAFUNDACION = LocalDate.of(2020, 6, 2); //fecha fundacion Valorant
+    private static final LocalDate FECHAFUNDACION = LocalDate.of(2020, 6, 2);
+    //fecha fundacion hay que meterla en Juego
 
     public EquipoController() {
         eDAO = new EquipoDAO();

@@ -76,7 +76,7 @@ public class Main {
             System.out.println(opcionesConJornadas);
             int opcion = sc.nextInt();
             switch (opcion) {
-                case 1 -> jornadaController.crearJornada();
+                case 1 -> jornadaController.validarCreacionJornada();
                 default -> yes = false;
             }
         }while(yes);
