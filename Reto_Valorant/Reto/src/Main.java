@@ -63,7 +63,10 @@ public class Main {
             System.out.println(opcionesSinJornadas);
             int opcion = sc.nextInt();
             switch (opcion) {
-                default -> yes = false;
+                default:
+                    yes = jornadaController.validarCreacionJornada();
+                    enfrentamientoController.crearEnfrentamientos();
+                    break;
             }
         }while(yes);
     }
@@ -71,7 +74,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         boolean yes = true;
         do {
-            System.out.println(opcionesSinJornadas + opcionesConJornadas);
+            System.out.println(opcionesConJornadas);
             int opcion = sc.nextInt();
             switch (opcion) {
                 case 1 -> jornadaController.crearJornada();
