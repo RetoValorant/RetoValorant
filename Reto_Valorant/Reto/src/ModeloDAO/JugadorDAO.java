@@ -42,7 +42,7 @@ public class JugadorDAO {
 
 
         public List<Jugador> obtenerPorEquipo(int codEquipo) {
-            return jugadores.stream().filter(j -> j.getEquipo().getCodEquipo() == codEquipo).toList();
+            return jugadores.stream().filter(j -> j.getEquipo().get().getCodEquipo() == codEquipo).toList();
             //obtiene los jugadores por Equipo con codigo coincidente y los añade a 'jugadores'
 
         }

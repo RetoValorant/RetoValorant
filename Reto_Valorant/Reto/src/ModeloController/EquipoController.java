@@ -5,6 +5,7 @@ package ModeloController;
 import Modelo.Equipo;
 import ModeloDAO.EquipoDAO;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -32,7 +33,7 @@ public class EquipoController {
     private String validarDato() {
         String var = "";
         boolean isFinished = false;
-        Pattern p = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9 _-]{3,15}[a-zA-Z0-9]$"); //15 como mucho como en MER/MR
+        Pattern p = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9 _-]{3,15}$"); //15 como mucho como en MER/MR
 
         do {
             try {
@@ -73,11 +74,12 @@ public class EquipoController {
         String fechaNOpars = "";
         do {
             try {
-                fechaNOpars = JOptionPane.showInputDialog(null, "Ingrese la fehca de fundacion del equipo");
+                fechaNOpars = JOptionPane.showInputDialog(null, "Ingrese la fecha de fundacion del equipo");
                 if (fechaNOpars.isBlank()) {
                     JOptionPane.showMessageDialog(null, "la fecha no puede estar vacia");
                 } else {
-                    fechaPars = LocalDate.parse(fechaNOpars);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    fechaPars = LocalDate.parse(fechaNOpars,formatter);
                     if (fechaPars.isBefore(FECHAFUNDACION)) {
                         JOptionPane.showMessageDialog(null, "La fecha de fundacion no puede ser anterior al año de creacion del juego");
                     }

@@ -54,7 +54,7 @@ public class Main {
 
     public static void opcionesSinJornadas() {
         Scanner sc = new Scanner(System.in);
-        boolean yes=false;
+        boolean yes=true;
         do {
             System.out.println(opcionesSinJornadas);
             int opcion = sc.nextInt();

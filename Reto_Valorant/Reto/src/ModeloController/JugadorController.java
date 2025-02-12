@@ -59,9 +59,8 @@ public class JugadorController {
         return !equipos.isEmpty();
     }
     private int generarCodJugador(){
-        Set<Integer> codExistentes = jugadorDAO.obtenerTodos() .stream().map(Jugador::getCodJugador).collect(toSet());
+        Set<Integer> codExistentes = jugadorDAO.obtenerTodos().stream().map(Jugador::getCodJugador).collect(toSet());
         //recoge todos los codigos de los jugadores
-
         int codJugador = 0;
         while (codExistentes.contains(codJugador)) {
             codJugador++;

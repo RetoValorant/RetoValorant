@@ -17,8 +17,8 @@ public class EquipoDAO {
         listaEquipos.add(e);
     }
 
-    public List<Equipo> obtenerTodosLosEquipos() {
-        return new ArrayList<>(listaEquipos);
+    public ArrayList<Equipo> obtenerTodosLosEquipos() {
+        return new ArrayList<Equipo>(listaEquipos);
         //Devuelve un ArrayList nuevo para la seguridad de datos
     }
     public Optional<Equipo> obtenerEquipoPorCodigo(int codEquipo) {
