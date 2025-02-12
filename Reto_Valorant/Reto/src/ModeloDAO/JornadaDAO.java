@@ -5,8 +5,8 @@ import Modelo.Jornada;
 import java.util.ArrayList;
 
 public class JornadaDAO {
-    private static ArrayList<Jornada> jornadas;
-    public static void anadirJornada(Jornada j) {
+    private ArrayList<Jornada> jornadas;
+    public void anadirJornada(Jornada j) {
         try {
             jornadas.add(j);
         }catch(NullPointerException e) {
@@ -14,7 +14,7 @@ public class JornadaDAO {
             jornadas.add(j);
         }
     }
-    public static ArrayList<Jornada> getJornadas() {
+    public ArrayList<Jornada> getJornadas() {
         return jornadas;
     }
 }

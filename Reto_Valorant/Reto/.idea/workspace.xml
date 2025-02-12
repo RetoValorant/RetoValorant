@@ -1,29 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="f44a7a43-f27e-4c5b-acac-97da0bb0afcd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Reto.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/Modelo/Enfrentamiento.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/Modelo/Enfrentamiento.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/Modelo/Equipo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/Modelo/Equipo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/Modelo/Jornada.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/Modelo/Jornada.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/Modelo/Jugador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/Modelo/Jugador.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloController/EnfrentamientoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloController/EnfrentamientoController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloController/EquipoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloController/EquipoController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloController/JornadaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloController/JornadaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloController/JugadorController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloController/JugadorController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloDAO/EnfrentamientoDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloDAO/EnfrentamientoDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloDAO/EquipoDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloDAO/EquipoDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloDAO/JornadaDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloDAO/JornadaDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloDAO/JugadorDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloDAO/JugadorDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Modelo/Equipo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modelo/Equipo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Modelo/Enfrentamiento.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modelo/Enfrentamiento.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ModeloController/EnfrentamientoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloController/EnfrentamientoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ModeloController/EquipoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloController/EquipoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ModeloController/JornadaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloController/JornadaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ModeloController/JugadorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloController/JugadorController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ModeloDAO/EquipoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloDAO/EquipoDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ModeloDAO/EnfrentamientoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloDAO/EnfrentamientoDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ModeloDAO/JornadaDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloDAO/JornadaDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Nacionalidades/Country.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Nacionalidades/Country.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2svudGgAmnymiRpE5X5u6aEfkQ2" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -32,8 +46,14 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "inlay.hints",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
