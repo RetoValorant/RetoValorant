@@ -12,7 +12,6 @@ public class Main {
     public static EnfrentamientoController enfrentamientoController;
     public static String opcionesSinJornadas;
     public static String opcionesConJornadas;
-    public static String[] tipos = new String[4];
 
     public static void main(String[] args) {
         declararVariables();
@@ -55,7 +54,7 @@ public class Main {
 
     public static void opcionesSinJornadas() {
         Scanner sc = new Scanner(System.in);
-        boolean yes=false;
+        boolean yes=true;
         do {
             System.out.println(opcionesSinJornadas);
             int opcion = sc.nextInt();
@@ -70,7 +69,6 @@ public class Main {
         }while(yes);
     }
 
-    /*
     public static void opcionesConJornadas() {
         Scanner sc = new Scanner(System.in);
         boolean yes = true;
@@ -78,10 +76,9 @@ public class Main {
             System.out.println(opcionesConJornadas);
             int opcion = sc.nextInt();
             switch (opcion) {
-                case 1 -> jornadaController.crearJornada();
+                case 1 -> jornadaController.validarCreacionJornada();
                 default -> yes = false;
             }
         }while(yes);
     }
-    */
 }
