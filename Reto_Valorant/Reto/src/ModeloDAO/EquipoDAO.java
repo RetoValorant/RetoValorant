@@ -7,10 +7,10 @@ import java.util.Optional;
 
 public class EquipoDAO {
 
-    private List<Equipo> listaEquipos;
+    private static ArrayList<Equipo> listaEquipos = new ArrayList<>();
 
     public EquipoDAO() {
-        this.listaEquipos = new ArrayList<>();
+        this.listaEquipos = listaEquipos;
     }
 
     public void crearEquipo(Equipo e) {
@@ -18,9 +18,10 @@ public class EquipoDAO {
     }
 
     public ArrayList<Equipo> obtenerTodosLosEquipos() {
-        return new ArrayList<Equipo>(listaEquipos);
+        return listaEquipos;
         //Devuelve un ArrayList nuevo para la seguridad de datos
     }
+
     public Optional<Equipo> obtenerEquipoPorCodigo(int codEquipo) {
         return listaEquipos.stream()
                 .filter(e -> e.getCodEquipo() == codEquipo)

@@ -24,7 +24,7 @@ public class JugadorController {
 
     private static JugadorDAO jugadorDAO;
     private static EquipoDAO equipoDAO;
-    List<Equipo> equipos;
+    ArrayList<Equipo> equipos;
     private static final int SUELDO = 1184;
 
     public JugadorController() {
@@ -35,12 +35,12 @@ public class JugadorController {
         if (this.validarCreacion()) {
             Jugador j = new Jugador();
             j.setCodJugador(this.generarCodJugador());
-            j.setNombre(this.validarNomApeNik("Nombre", "Ingresa el nombre del jugador."));
-            j.setApellido(this.validarNomApeNik("Apellido", "Ingresa el apellido del jugador."));
+            j.setNombre(this.validarNomApeNik("Nombre", "Ingresa el nombre del jugador.", "^[A-ZÁÉÍÓÚÑÄËÏÖÜ][a-záéíóúñäëïöü\\s]*$"));
+            j.setApellido(this.validarNomApeNik("Apellido", "Ingresa el apellido del jugador.", "^[A-ZÁÉÍÓÚÑÄËÏÖÜ][a-záéíóúñäëïöü\\s]*$"));
             j.setNacionalidad(this.validarNacionalidad());
             j.setFechaNacimiento(this.validarFechaNacimiento());
             //j.setRol(RolController.validarRol());
-            j.setNickname(this.validarNomApeNik("Nickname", "Ingresa el nickname del jugador."));
+            j.setNickname(this.validarNomApeNik("Nickname", "Ingresa el nickname del jugador.", "\\S{3,16}"));
             j.setSueldo(this.validarSueldo());
             j.setEquipo(this.validarEquipos());
             //Si este metodo devuelve null hay que dar una opcion de modificar jugador para dar de alta en un equipo
@@ -68,9 +68,9 @@ public class JugadorController {
         }
         return codJugador;
     }
-    private String validarNomApeNik(String dato,String msj){
+    private String validarNomApeNik(String dato,String msj, String patron){
         boolean isValid = false;
-        Pattern pattern = Pattern.compile("^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ]+ [a-zA-ZñÑáéíóúÁÉÍÓÚüÜ]+$");
+        Pattern pattern = Pattern.compile(patron);
         String var="";
         do {
             try {

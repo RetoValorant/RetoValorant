@@ -58,9 +58,8 @@ public class EquipoController {
     }
     private int generarCodEquipo() {
         Set<Integer> codigosEquipo = eDAO.obtenerTodosLosEquipos()
-                                            .stream().map(Equipo::getCodEquipo)
-                                                    .collect(Collectors.toSet());
-
+                    .stream().map(Equipo::getCodEquipo)
+                    .collect(Collectors.toSet());
         int codEquipo = 0;
         while (codigosEquipo.contains(codEquipo)) {
             codEquipo++;
