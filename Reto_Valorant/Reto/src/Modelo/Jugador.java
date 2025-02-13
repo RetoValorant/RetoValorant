@@ -111,4 +111,12 @@ public class Jugador {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    @Override
+    public String toString(){
+    return  getNombre()+"\n" +
+            getNickname()+"\n" +
+            getNacionalidad()+"\n" +
+            getEquipo().toString()+"\n";
+    }
 }

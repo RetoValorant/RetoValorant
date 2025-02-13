@@ -3,6 +3,7 @@ import ModeloController.EquipoController;
 import ModeloController.JornadaController;
 import ModeloController.JugadorController;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -56,15 +57,33 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         boolean yes=true;
         do {
-            System.out.println(opcionesSinJornadas);
-            int opcion = sc.nextInt();
-            switch (opcion) {
-                case 1 -> jugadorController.dataValidation();
-                case 2 -> equipoController.validarDatosEquipo();
-                default -> {
-                    yes = jornadaController.validarCreacionJornada();
-                    enfrentamientoController.crearEnfrentamientos();
+            try {
+                System.out.println(opcionesSinJornadas);
+                int opcion = sc.nextInt();
+                switch (opcion) {
+                    case 1 -> jugadorController.dataValidation();
+                    case 2 -> equipoController.validarDatosEquipo();
+                    case 3 -> jugadorController.modificarJugador();
+                    case 4 -> equipoController.modificarEquipo();
+                    case 5 -> jugadorController.eliminarJugador();
+                    case 6 -> equipoController.eliminarEquipo();
+                    case 7 -> jugadorController.verTodosJugadores();
+                    case 8 -> equipoController.verTodosEquipos();
+                    case 9 -> jugadorController.verPorNombre();
+                    case 10 -> equipoController.verPorNombre();
+                    default -> {
+                        yes = jornadaController.validarCreacionJornada();
+                        enfrentamientoController.crearEnfrentamientos();
+                    }
                 }
+            }catch (InputMismatchException e){
+                sc.nextLine();
+                System.out.println("Vuelve a teclear la opcion por favor " + e.getMessage()+"\n");
+                // para notificar que ha pasado, ocurre cuando se 'lia' el Scanner
+            }catch (NullPointerException e){
+                System.out.println("La opcion es nula, aconsejamos crear antes para despues modificar\n");
+            }catch (NumberFormatException e){
+                System.out.println("No se acepta ese numero " +e.getMessage() +"\n");
             }
         }while(yes);
     }

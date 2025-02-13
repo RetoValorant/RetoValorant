@@ -7,12 +7,10 @@ import java.util.List;
 
 public class JugadorDAO {
 
-        private ArrayList<Jugador> jugadores;
+        private static ArrayList<Jugador> jugadores = new ArrayList<>();
 
 
-        public JugadorDAO() {
-            this.jugadores = new ArrayList<>();
-        }
+        public JugadorDAO() {}
 
 
         public void agregar(Jugador jugador) {

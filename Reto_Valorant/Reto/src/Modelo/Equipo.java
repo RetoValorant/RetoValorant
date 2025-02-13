@@ -101,5 +101,10 @@ public class Equipo {
     public void eliminarJugador(Jugador jugador) {
         this.listaJugadores.remove(jugador);
     }
-
+    @Override
+    public String toString() {
+        return getNombre()+"\n" +
+                getCodEquipo()+"\n" +
+                getFechaFundacion();
+    }
 }

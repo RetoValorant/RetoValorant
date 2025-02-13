@@ -2,6 +2,7 @@ package ModeloController;
 
 import Modelo.Equipo;
 import Modelo.Jornada;
+import ModeloDAO.EquipoDAO;
 import ModeloDAO.JornadaDAO;
 
 import javax.swing.*;
@@ -36,7 +37,6 @@ public class JornadaController {
                 resultado = false;
             } else {
                 System.out.println("La cantidad de equipos no es par");
-                resultado = true;
             }
         }catch (NullPointerException e){
             System.out.println("No existe ningun equipo.");
