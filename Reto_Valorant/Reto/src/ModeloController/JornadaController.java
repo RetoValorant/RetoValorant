@@ -17,18 +17,30 @@ public class JornadaController {
     private static EquipoDAO equipoDAO;
     private static ArrayList<Jornada> jornadas;
     private static EnfrentamientoController enfrentamientoController;
-    private static List<Equipo> equipos;
+    private static ArrayList<Equipo> equipos;
 
     private static final int[] meses31 = {1,3,5,7,8,10,12};
+    private void declararVariables(){
+        jornadaDAO = new JornadaDAO();
+        equipoDAO = new EquipoDAO();
+        enfrentamientoController = new EnfrentamientoController();
+        jornadas = jornadaDAO.getJornadas();
+        equipos = equipoDAO.obtenerTodosLosEquipos();
+    }
     public boolean validarCreacionJornada(){
-        boolean resultado;
-        if (equipos.size() % 2 == 0 && equiposMas2Jugadores()){
-            declararVariables();
-            crearJornada();
-            resultado = false;
-        }else {
-            System.out.println("La cantidad de equipos no es par");
-            resultado = true;
+        this.declararVariables();
+        boolean resultado = true;
+        try {
+            if (equipos.size() % 2 == 0 && equiposMas2Jugadores()) {
+                declararVariables();
+                crearJornada();
+                resultado = false;
+            } else {
+                System.out.println("La cantidad de equipos no es par");
+                resultado = true;
+            }
+        }catch (NullPointerException e){
+            System.out.println("No existe ningun equipo.");
         }
         return resultado;
     }
@@ -43,10 +55,6 @@ public class JornadaController {
             }
         }
         return resultado;
-    }
-    private void declararVariables(){
-        jornadas = jornadaDAO.getJornadas();
-        equipos = equipoDAO.obtenerTodosLosEquipos();
     }
     private void crearJornada(){
         for (int i = 0; i < equipos.size(); i++){

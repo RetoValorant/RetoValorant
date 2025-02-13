@@ -63,12 +63,12 @@ public class Main {
                 case 2 -> equipoController.validarDatosEquipo();
                 default -> {
                     yes = jornadaController.validarCreacionJornada();
-                    enfrentamientoController.crearEnfrentamientos();
+                    if (!yes)
+                        enfrentamientoController.crearEnfrentamientos();
                 }
             }
         }while(yes);
     }
-
     public static void opcionesConJornadas() {
         Scanner sc = new Scanner(System.in);
         boolean yes = true;
