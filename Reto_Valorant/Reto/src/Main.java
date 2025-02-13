@@ -1,5 +1,6 @@
 import Modelo.Juego;
 import ModeloController.*;
+import ModeloDAO.CompeticionDAO;
 import ModeloDAO.JuegoDAO;
 
 import java.util.InputMismatchException;
@@ -10,6 +11,7 @@ public class Main {
     public static JugadorController jugadorController;
     public static EquipoController equipoController;
     public static JornadaController jornadaController;
+    public static CompeticionController competicionController;
     public static EnfrentamientoController enfrentamientoController;
     public static String opcionesSinJuego;
     public static String opcionesSinJornadas;
@@ -27,6 +29,7 @@ public class Main {
         jugadorController = new JugadorController();
         equipoController = new EquipoController();
         jornadaController = new JornadaController();
+        competicionController = new CompeticionController();
         enfrentamientoController = new EnfrentamientoController();
         opcionesSinJuego = """
                             1. Añadir un juego nuevo.
@@ -103,6 +106,7 @@ public class Main {
     public static void eligeElJuego(){
         Juego juego = juegoController.elegirElJuego();
         equipoController.definirFechaFundacion(juego);
+        competicionController.crearCompeticion(juego);
     }
 
     public static void opcionesSinJornadas() {
@@ -123,9 +127,11 @@ public class Main {
                     case 8 -> equipoController.verTodosEquipos();
                     case 9 -> jugadorController.verPorNombre();
                     case 10 -> equipoController.verPorNombre();
+                    case 11 -> equipoController.verJugadores();
                     default -> {
                         yes = jornadaController.validarCreacionJornada();
-                        enfrentamientoController.crearEnfrentamientos();
+                        if (!yes)
+                            enfrentamientoController.crearEnfrentamientos();
                     }
                 }
             }catch (InputMismatchException e){
@@ -134,6 +140,7 @@ public class Main {
                 // para notificar que ha pasado, ocurre cuando se 'lia' el Scanner
             }catch (NullPointerException e){
                 System.out.println("La opcion es nula, aconsejamos crear antes para despues modificar\n");
+                yes = true;
             }catch (NumberFormatException e){
                 System.out.println("No se acepta ese numero " +e.getMessage() +"\n");
             }

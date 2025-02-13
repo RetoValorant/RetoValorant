@@ -297,36 +297,25 @@ public class JugadorController {
         }
     }
     public void verPorNombre() {
-        ArrayList<Jugador> jugadores = jugadorDAO.obtenerTodos();
-
+        String[] nombres = jugadorDAO.obtenerTodos().stream().map(Jugador::getNombre).toArray(String[]::new);
         do {
-            try {
-                String nombreABuscar = solicitarNombreJugador();
-                if (nombreABuscar == null || nombreABuscar.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "El nombre no puede estar vacío.");
-                }
+            String equipoElegido = (String) JOptionPane.showInputDialog(null,
+                    "Elija el nombre del jugador que quiere ver",
+                    "Opciones",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    nombres,
+                    nombres[0]
+            );
+            if (equipoElegido == null || equipoElegido.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null,"El nombre no puede ser nulo");
+            }else {
 
-                List<Jugador> nombresIguales = buscarJugadoresPorNombre(jugadores, nombreABuscar);
+                Jugador j = jugadorDAO.obtenerTodos().stream().filter(jugador -> jugador.getNombre().equals(equipoElegido)).findFirst().orElse(null);
 
-                if (nombresIguales.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "No se ha encontrado al jugador.");
-                } else if (nombresIguales.size() == 1) {
-                    JOptionPane.showMessageDialog(null, nombresIguales.getFirst().toString());
-                } else {
-                    mostrarJugadoresRepetidos(nombresIguales);
-                }
-            } catch (NullPointerException e) {
-                System.out.println("El jugador no puede ser nulo.");
+                JOptionPane.showMessageDialog(null, Objects.requireNonNull(j).toString());
             }
-        } while (JOptionPane.showConfirmDialog(null, "¿Quiere continuar buscando jugadores?") == JOptionPane.YES_OPTION);
-    }
-    private String solicitarNombreJugador() {
-        return JOptionPane.showInputDialog(null, "¿Cuál es el nombre del jugador?");
-    }
-    private List<Jugador> buscarJugadoresPorNombre(List<Jugador> jugadores, String nombre) {
-        return jugadores.stream()
-                .filter(jugador -> jugador.getNombre().equalsIgnoreCase(nombre))
-                .toList();
+        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar viendo jugadores?") == 0);
     }
     private void mostrarJugadoresRepetidos(List<Jugador> nombresIguales) {
 

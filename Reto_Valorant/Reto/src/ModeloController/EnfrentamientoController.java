@@ -19,7 +19,7 @@ public class EnfrentamientoController {
     ArrayList<Enfrentamiento> enfrentamientos;
     ArrayList<Enfrentamiento> enfrentamientosMitad1;
     ArrayList<Jornada> jornadas;
-    List<Equipo> equipos;
+    ArrayList<Equipo> equipos;
 
     public void crearEnfrentamientos() {
         declararVariables();
@@ -28,6 +28,9 @@ public class EnfrentamientoController {
         decirEnfrentamientos();
     }
     private void declararVariables(){
+        enfrentamientoDAO = new EnfrentamientoDAO();
+        jornadaDAO = new JornadaDAO();
+        equipoDAO = new EquipoDAO();
         enfrentamientos = enfrentamientoDAO.getEnfrentamientos();
         enfrentamientosMitad1 = new ArrayList<>();
         jornadas = jornadaDAO.getJornadas();
