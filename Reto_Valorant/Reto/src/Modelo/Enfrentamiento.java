@@ -3,22 +3,30 @@ package Modelo;
 import java.time.LocalTime;
 
 public class Enfrentamiento {
-    private int numJornada;
     private int resultadosEq1;
     private int resultadosEq2;
     private LocalTime hora;
     private Jornada jornada;
     private Equipo equipo1;
     private Equipo equipo2;
+    private int idEnfrentamiento;
 
-    public Enfrentamiento(int numJornada, int resultadosEq1, int resultadosEq2, LocalTime hora, Jornada jornada, Equipo equipo1, Equipo equipo2) {
-        this.numJornada = numJornada;
+    public Enfrentamiento(int resultadosEq1, int resultadosEq2, LocalTime hora, Jornada jornada, Equipo equipo1, Equipo equipo2,int idEnfrentamiento) {
         this.resultadosEq1 = resultadosEq1;
         this.resultadosEq2 = resultadosEq2;
         this.hora = hora;
         this.jornada = jornada;
         this.equipo1 = equipo1;
         this.equipo2 = equipo2;
+        this.idEnfrentamiento = idEnfrentamiento;
+    }
+
+    public int getIdEnfrentamiento() {
+        return idEnfrentamiento;
+    }
+
+    public void setIdEnfrentamiento(int idEnfrentamiento) {
+        this.idEnfrentamiento = idEnfrentamiento;
     }
 
     public Enfrentamiento() {
@@ -30,14 +38,6 @@ public class Enfrentamiento {
 
     public void setHora(LocalTime hora) {
         this.hora = hora;
-    }
-
-    public int getNumJornada() {
-        return numJornada;
-    }
-
-    public void setNumJornada(int numJornada) {
-        this.numJornada = numJornada;
     }
 
     public int getResultadosEq1() {

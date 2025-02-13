@@ -12,7 +12,6 @@ public class Main {
     public static EnfrentamientoController enfrentamientoController;
     public static String opcionesSinJornadas;
     public static String opcionesConJornadas;
-    public static String[] tipos = new String[4];
 
     public static void main(String[] args) {
         declararVariables();
@@ -51,30 +50,33 @@ public class Main {
                                 10. Añadir un resultado a un enfrentamiento.
                                 11. Ver la puntuacion de un equipo.
                                 """;
-        tipos[0] = "jugador";
-        tipos[1] = "equipo";
-        tipos[2] = "jornada";
-        tipos[3] = "enfrentamiento";
     }
+
     public static void opcionesSinJornadas() {
         Scanner sc = new Scanner(System.in);
-        boolean yes;
+        boolean yes=true;
         do {
             System.out.println(opcionesSinJornadas);
             int opcion = sc.nextInt();
             switch (opcion) {
-                default -> yes = false;
+                case 1 -> jugadorController.dataValidation();
+                case 2 -> equipoController.validarDatosEquipo();
+                default -> {
+                    yes = jornadaController.validarCreacionJornada();
+                    enfrentamientoController.crearEnfrentamientos();
+                }
             }
         }while(yes);
     }
+
     public static void opcionesConJornadas() {
         Scanner sc = new Scanner(System.in);
         boolean yes = true;
         do {
-            System.out.println(opcionesSinJornadas + opcionesConJornadas);
+            System.out.println(opcionesConJornadas);
             int opcion = sc.nextInt();
             switch (opcion) {
-                case 1 -> jornadaController.crearJornada();
+                case 1 -> jornadaController.validarCreacionJornada();
                 default -> yes = false;
             }
         }while(yes);
