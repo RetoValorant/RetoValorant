@@ -2,7 +2,6 @@ package ModeloController;
 
 import Modelo.Equipo;
 import Modelo.Jornada;
-import ModeloDAO.EquipoDAO;
 import ModeloDAO.JornadaDAO;
 
 import javax.swing.*;

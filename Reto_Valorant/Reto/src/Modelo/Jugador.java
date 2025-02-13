@@ -20,7 +20,7 @@ public class Jugador {
         this.apellido = apellido;
         this.nacionalidad = nacionalidad;
         this.fechaNacimiento = fechaNacimiento;
-        sueldo = sueldo;
+        this.sueldo = sueldo;
         this.rol = rol;
         this.nickname = nickname;
         this.equipo = equipo;
@@ -32,7 +32,7 @@ public class Jugador {
         this.apellido = apellido;
         this.nacionalidad = nacionalidad;
         this.fechaNacimiento = fechaNacimiento;
-        sueldo = sueldo;
+        this.sueldo = sueldo;
         this.rol = rol;
         this.nickname = nickname;
     }
@@ -92,7 +92,7 @@ public class Jugador {
         return sueldo;
     }
 
-    public void setSueldo(int sueldo) {
+    public void setSueldo(double sueldo) {
         sueldo = sueldo;
     }
 

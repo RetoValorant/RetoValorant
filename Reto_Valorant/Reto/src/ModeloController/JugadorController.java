@@ -13,6 +13,7 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -149,7 +150,6 @@ public class JugadorController {
             try {
                 sueldo = Integer.parseInt(JOptionPane.showInputDialog(null,"Ingresa el sueldo del jugador"));
                 if (sueldo < SUELDO) {
-                    isValid = false;
                     JOptionPane.showMessageDialog(null,"El sueldo no puede ser menor que " + SUELDO);
                 }else {
                     isValid = true;
@@ -160,7 +160,7 @@ public class JugadorController {
         }while (!isValid);
         return sueldo;
     }
-    private Optional<Equipo> validarEquipos() {
+    private Equipo validarEquipos() {
         String nombre = (String) JOptionPane.showInputDialog(
                 null,
                 "Selecciona el equipo al que pertenece el Jugador",
@@ -172,16 +172,13 @@ public class JugadorController {
         );
             if (nombre == null) {
                 JOptionPane.showMessageDialog(null, "No se seleccionó ningún equipo");
-                return Optional.empty();
             } else {
+
                 if (validarAnadirEquipo(nombre)) {
-                    return equipos.stream()
-                        .filter(e -> e.getNombre().equals(nombre))
-                        .findFirst();
-                }else {
-                    return Optional.empty();
+                    return equipos.stream().filter(e -> e.getNombre().equals(nombre)).findFirst().orElse(null);
                 }
             }
+        return null;
     }
     private boolean validarAnadirEquipo(String nombre) {
         Equipo equipoEncontrado = null;
@@ -201,6 +198,59 @@ public class JugadorController {
         }else {
             JOptionPane.showMessageDialog(null,"El equipo no existe.");
             return false;
+        }
+    }
+    public void modificarJugador(){
+        Jugador j = null;
+        ArrayList<Jugador> jugadores = jugadorDAO.obtenerTodos();
+        boolean isValid = false;
+        do {
+            try {
+                j = (Jugador) JOptionPane.showInputDialog(null,
+                        "",
+                        "",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        jugadores.stream().map(Jugador::getNombre).toArray(String[]::new),
+                        jugadores.getFirst().getNombre()
+                );
+                if (j==null){
+                    JOptionPane.showMessageDialog(null,"El jugador no puede ser nulo");
+                }else {
+                    isValid=true;
+                }
+
+            }catch (NullPointerException e){
+                System.out.println("el jugador no puede ser nulo");
+            }
+            opcionesModificar(j);
+        }while (!isValid);
+    }
+    public void opcionesModificar(Jugador j){
+        String[] opc = {"Nombre","Apellido","Nacionalidad","Fehca de nacimiento","Nickname","Sueldo","Equipo"};
+        try {
+
+            String opcion = (String) JOptionPane.showInputDialog(null,
+                    "Opciones para modificar",
+                    "Opciones",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    opc,
+                    opc[0]
+            );
+            if (opcion.isBlank()){
+                JOptionPane.showMessageDialog(null,"No se puede una opcion");
+            }else {
+                switch (opcion){
+                    case "Nombre" -> j.setNombre(this.validarNomApeNik("Nombre", "Ingresa el nombre del jugador.", "^[A-ZÁÉÍÓÚÑÄËÏÖÜ][a-záéíóúñäëïöü\\s]*$"));
+                    case "Apellido" -> j.setApellido(this.validarNomApeNik("Apellido", "Ingresa el apellido del jugador.", "^[A-ZÁÉÍÓÚÑÄËÏÖÜ][a-záéíóúñäëïöü\\s]*$"));
+                    case "Nacionalidad" ->  j.setNacionalidad(this.validarNacionalidad());
+                    
+                }
+            }
+
+        }catch (Exception e){
+
         }
     }
 }
