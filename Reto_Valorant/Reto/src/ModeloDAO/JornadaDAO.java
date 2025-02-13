@@ -5,17 +5,14 @@ import Modelo.Jornada;
 import java.util.ArrayList;
 
 public class JornadaDAO {
-    private static ArrayList<Jornada> jornadas;
-
-    public static void anadirJornada(Jornada j) {
-        try {
-            jornadas.add(j);
-        }catch(NullPointerException e) {
+    private ArrayList<Jornada> jornadas;
+    public void anadirJornada(Jornada j) {
+        if (jornadas == null) {
             jornadas = new ArrayList<>();
-            jornadas.add(j);
         }
+            jornadas.add(j);
     }
-    public static ArrayList<Jornada> getJornadas() {
+    public ArrayList<Jornada> getJornadas() {
         return jornadas;
     }
 }

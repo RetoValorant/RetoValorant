@@ -9,14 +9,24 @@ public class Enfrentamiento {
     private Jornada jornada;
     private Equipo equipo1;
     private Equipo equipo2;
+    private int idEnfrentamiento;
 
-    public Enfrentamiento(int resultadosEq1, int resultadosEq2, LocalTime hora, Jornada jornada, Equipo equipo1, Equipo equipo2) {
+    public Enfrentamiento(int resultadosEq1, int resultadosEq2, LocalTime hora, Jornada jornada, Equipo equipo1, Equipo equipo2,int idEnfrentamiento) {
         this.resultadosEq1 = resultadosEq1;
         this.resultadosEq2 = resultadosEq2;
         this.hora = hora;
         this.jornada = jornada;
         this.equipo1 = equipo1;
         this.equipo2 = equipo2;
+        this.idEnfrentamiento = idEnfrentamiento;
+    }
+
+    public int getIdEnfrentamiento() {
+        return idEnfrentamiento;
+    }
+
+    public void setIdEnfrentamiento(int idEnfrentamiento) {
+        this.idEnfrentamiento = idEnfrentamiento;
     }
 
     public Enfrentamiento() {

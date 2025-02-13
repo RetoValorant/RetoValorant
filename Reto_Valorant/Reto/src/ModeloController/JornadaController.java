@@ -5,6 +5,7 @@ import Modelo.Jornada;
 import ModeloDAO.EquipoDAO;
 import ModeloDAO.JornadaDAO;
 
+import javax.swing.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class JornadaController {
     private static final int[] meses31 = {1,3,5,7,8,10,12};
     public boolean validarCreacionJornada(){
         boolean resultado;
-        if (equipos.size() % 2 == 0){
+        if (equipos.size() % 2 == 0 && equiposMas2Jugadores()){
             declararVariables();
             crearJornada();
             resultado = false;
@@ -31,11 +32,23 @@ public class JornadaController {
         }
         return resultado;
     }
-    public void declararVariables(){
+
+    private boolean equiposMas2Jugadores(){
+        boolean resultado = true;
+        for (Equipo equipo : equipos) {
+            if (equipo.getListaJugadores().size() < 2){
+                JOptionPane.showMessageDialog(null, "El equipo " + equipo.getNombre() + " tiene que tener al menos 2 jugadores para continuar");
+                resultado = false;
+                break;
+            }
+        }
+        return resultado;
+    }
+    private void declararVariables(){
         jornadas = jornadaDAO.getJornadas();
         equipos = equipoDAO.obtenerTodosLosEquipos();
     }
-    public void crearJornada(){
+    private void crearJornada(){
         for (int i = 0; i < equipos.size(); i++){
             Jornada jornada = new Jornada();
             jornada.setNumJornada(elegirNumJornada());
@@ -47,7 +60,7 @@ public class JornadaController {
             System.out.println(jornada.getNumJornada() + " " + jornada.getFechaInicio());
         }
     }
-    public int elegirNumJornada(){
+    private int elegirNumJornada(){
         int numJornada;
         try {
             numJornada = jornadas.getLast().getNumJornada()+1;
@@ -56,7 +69,7 @@ public class JornadaController {
         }
         return numJornada;
     }
-    public LocalDate elegirFecha(){
+    private LocalDate elegirFecha(){
         int mes;
         int dia;
         int year;

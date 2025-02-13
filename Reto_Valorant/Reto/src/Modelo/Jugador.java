@@ -1,6 +1,7 @@
 package Modelo;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class Jugador {
     private int codJugador;
@@ -8,18 +9,18 @@ public class Jugador {
     private String apellido;
     private String nacionalidad;
     private LocalDate fechaNacimiento;
-    private int Sueldo;
+    private int sueldo;
     private String rol;
     private String nickname;
-    private Equipo equipo;
+    private Optional<Equipo> equipo;
 
-    public Jugador(int codJugador, String nombre, String apellido, String nacionalidad, LocalDate fechaNacimiento, int sueldo, String rol, String nickname, Equipo equipo) {
+    public Jugador(int codJugador, String nombre, String apellido, String nacionalidad, LocalDate fechaNacimiento, int sueldo, String rol, String nickname, Optional<Equipo> equipo) {
         this.codJugador = codJugador;
         this.nombre = nombre;
         this.apellido = apellido;
         this.nacionalidad = nacionalidad;
         this.fechaNacimiento = fechaNacimiento;
-        Sueldo = sueldo;
+        sueldo = sueldo;
         this.rol = rol;
         this.nickname = nickname;
         this.equipo = equipo;
@@ -31,7 +32,7 @@ public class Jugador {
         this.apellido = apellido;
         this.nacionalidad = nacionalidad;
         this.fechaNacimiento = fechaNacimiento;
-        Sueldo = sueldo;
+        sueldo = sueldo;
         this.rol = rol;
         this.nickname = nickname;
     }
@@ -39,11 +40,11 @@ public class Jugador {
     public Jugador() {
     }
 
-    public Equipo getEquipo() {
+    public Optional<Equipo> getEquipo() {
         return equipo;
     }
 
-    public void setEquipo(Equipo equipo) {
+    public void setEquipo(Optional<Equipo> equipo) {
         this.equipo = equipo;
     }
 
@@ -88,11 +89,11 @@ public class Jugador {
     }
 
     public int getSueldo() {
-        return Sueldo;
+        return sueldo;
     }
 
     public void setSueldo(int sueldo) {
-        Sueldo = sueldo;
+        sueldo = sueldo;
     }
 
     public String getRol() {
