@@ -12,9 +12,9 @@ public class Jugador {
     private int sueldo;
     private String rol;
     private String nickname;
-    private Optional<Equipo> equipo;
+    private Equipo equipo;
 
-    public Jugador(int codJugador, String nombre, String apellido, String nacionalidad, LocalDate fechaNacimiento, int sueldo, String rol, String nickname, Optional<Equipo> equipo) {
+    public Jugador(int codJugador, String nombre, String apellido, String nacionalidad, LocalDate fechaNacimiento, int sueldo, String rol, String nickname, Equipo equipo) {
         this.codJugador = codJugador;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -40,11 +40,11 @@ public class Jugador {
     public Jugador() {
     }
 
-    public Optional<Equipo> getEquipo() {
+    public Equipo getEquipo() {
         return equipo;
     }
 
-    public void setEquipo(Optional<Equipo> equipo) {
+    public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
     }
 

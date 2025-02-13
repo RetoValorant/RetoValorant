@@ -77,7 +77,7 @@ public class Main {
             int opcion = sc.nextInt();
             switch (opcion) {
                 case 1 -> jornadaController.validarCreacionJornada();
-                default -> yes = false;
+                default -> yes = true;
             }
         }while(yes);
     }

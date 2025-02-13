@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f44a7a43-f27e-4c5b-acac-97da0bb0afcd" name="Changes" comment="Ya funciona equipos y jugador">
+    <list default="true" id="f44a7a43-f27e-4c5b-acac-97da0bb0afcd" name="Changes" comment="Funciona jornadas si no hay equipos">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Reto/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloController/JornadaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloController/JornadaController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ModeloController/JornadaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloController/JornadaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Modelo/Jugador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modelo/Jugador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ModeloDAO/JugadorDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloDAO/JugadorDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +68,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739448710402</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Funciona jornadas si no hay equipos">
+      <option name="closed" value="true" />
+      <created>1739449185295</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1739449185295</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -77,6 +84,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Ya funciona equipos y jugador" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ya funciona equipos y jugador" />
+    <MESSAGE value="Funciona jornadas si no hay equipos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Funciona jornadas si no hay equipos" />
   </component>
 </project>
