@@ -7,12 +7,10 @@ import java.util.List;
 
 public class JugadorDAO {
 
-        private ArrayList<Jugador> jugadores;
+        private static ArrayList<Jugador> jugadores = new ArrayList<>();
 
 
-        public JugadorDAO() {
-            this.jugadores = new ArrayList<>();
-        }
+        public JugadorDAO() {}
 
 
         public void agregar(Jugador jugador) {
@@ -24,7 +22,7 @@ public class JugadorDAO {
             return new ArrayList<>(jugadores);
         }
 
-        public void modificar(String codJugador, Jugador nuevoJugador) {
+        public void modificar(int codJugador, Jugador nuevoJugador) {
             jugadores.replaceAll(j -> j.getCodJugador() == nuevoJugador.getCodJugador() ? nuevoJugador : j);
         }
 
