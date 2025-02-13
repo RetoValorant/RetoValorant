@@ -38,9 +38,13 @@ public class JugadorController {
             //j.setRol(RolController.validarRol());
             j.setNickname(this.validarNomApeNik("Nickname", "Ingresa el nickname del jugador.", "\\S{3,16}"));
             j.setSueldo(this.validarSueldo());
-            j.setEquipo(this.validarEquipos());
+            Equipo equipo = this.validarEquipos();
+            j.setEquipo(equipo);
             //Si este metodo devuelve null hay que dar una opcion de modificar jugador para dar de alta en un equipo
             jugadorDAO.agregar(j);
+            if (equipo != null) {
+                equipoDAO.anadirJugador(equipo, j);
+            }
         }else {
             JOptionPane.showMessageDialog(null, "No se puede crear ningún jugador hasta que exista al menos un equipo", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -218,7 +222,7 @@ public class JugadorController {
             }catch (NullPointerException e){
                 System.out.println("el jugador no puede ser nulo");
             }
-        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar modificando jugadores?")==0);
+        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar modificando jugadores?")==1);
             opcionesModificar(j);
     }
     private void opcionesModificar(Jugador j){
@@ -281,9 +285,10 @@ public class JugadorController {
             ArrayList<Jugador> jugadores
              = jugadorDAO.obtenerTodos();
             for (Jugador j : jugadores){
-
-                JOptionPane.showMessageDialog(null,"El jugador es: "+j.toString());
-                //esto tengo que mejorarlo por que si hay 40 jugadores aparecen tantas veces las ventanas
+                Object[] options = { "OK", "CANCEL"};
+                JOptionPane.showOptionDialog(null, j.toString(), "Continuar",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                        null, options, options[0]);
             }
         }catch (NullPointerException e){
             System.out.println("No hay jugadores para enseñar");
@@ -315,17 +320,14 @@ public class JugadorController {
             }
         } while (JOptionPane.showConfirmDialog(null, "¿Quiere continuar buscando jugadores?") == JOptionPane.YES_OPTION);
     }
-
     private String solicitarNombreJugador() {
         return JOptionPane.showInputDialog(null, "¿Cuál es el nombre del jugador?");
     }
-
     private List<Jugador> buscarJugadoresPorNombre(List<Jugador> jugadores, String nombre) {
         return jugadores.stream()
                 .filter(jugador -> jugador.getNombre().equalsIgnoreCase(nombre))
                 .toList();
     }
-
     private void mostrarJugadoresRepetidos(List<Jugador> nombresIguales) {
 
         String[] opciones = nombresIguales.stream()
@@ -340,7 +342,6 @@ public class JugadorController {
             JOptionPane.showMessageDialog(null, "El jugador no puede ser nulo.");
         }
     }
-
     private String seleccionarJugadorPorApellido(String[] opciones) {
         return (String) JOptionPane.showInputDialog(
                 null,
@@ -352,7 +353,6 @@ public class JugadorController {
                 opciones[0]
         );
     }
-
     private void seleccionarJugador(List<Jugador> nombresIguales, String eleccion) {
 
         Jugador jugador = nombresIguales.stream()

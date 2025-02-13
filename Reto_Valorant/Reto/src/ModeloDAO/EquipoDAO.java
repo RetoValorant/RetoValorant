@@ -1,6 +1,8 @@
 package ModeloDAO;
 
 import Modelo.Equipo;
+import Modelo.Jugador;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,5 +35,8 @@ public class EquipoDAO {
         return listaEquipos.removeIf(e -> e.getCodEquipo() == codEquipo);
         //quita el equipo en caso de encontrarlo por su codigo
         //devuelve boolean para confirmar en Controller
+    }
+    public void anadirJugador(Equipo eq, Jugador j) {
+        eq.agregarJugador(j);
     }
 }

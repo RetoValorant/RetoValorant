@@ -114,9 +114,12 @@ public class Jugador {
 
     @Override
     public String toString(){
-    return  getNombre()+"\n" +
-            getNickname()+"\n" +
-            getNacionalidad()+"\n" +
-            getEquipo().toString()+"\n";
+    return  "Nombre: " + getNombre()+"\n" +
+            "Apellido: " + getApellido()+"\n" +
+            "Fecha de nacimiento: " + getFechaNacimiento()+"\n" +
+            "Nickname: " + getNickname()+"\n" +
+            "Nacionalidad: " + getNacionalidad()+"\n" +
+            "Sueldo: " + getSueldo() + "\n" +
+            "Equipo: \n" + getEquipo().toString() + "\n";
     }
 }

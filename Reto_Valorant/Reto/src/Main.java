@@ -1,29 +1,40 @@
-import ModeloController.EnfrentamientoController;
-import ModeloController.EquipoController;
-import ModeloController.JornadaController;
-import ModeloController.JugadorController;
+import Modelo.Juego;
+import ModeloController.*;
+import ModeloDAO.JuegoDAO;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
+    public static JuegoController juegoController;
     public static JugadorController jugadorController;
     public static EquipoController equipoController;
     public static JornadaController jornadaController;
     public static EnfrentamientoController enfrentamientoController;
+    public static String opcionesSinJuego;
     public static String opcionesSinJornadas;
     public static String opcionesConJornadas;
 
     public static void main(String[] args) {
         declararVariables();
+        opcionesSinJuego();
+        eligeElJuego();
         opcionesSinJornadas();
         opcionesConJornadas();
     }
     public static void declararVariables() {
+        juegoController = new JuegoController();
         jugadorController = new JugadorController();
         equipoController = new EquipoController();
         jornadaController = new JornadaController();
         enfrentamientoController = new EnfrentamientoController();
+        opcionesSinJuego = """
+                            1. Añadir un juego nuevo.
+                            2. Eliminar un juego.
+                            3. Modificar un juego.
+                            4. Ver los juegos que hay.
+                            5. Continuar a la competicion.
+                            """;
         opcionesSinJornadas = """
                                 1. Crear un Jugador.
                                 2. Crear un Equipo.
@@ -51,6 +62,47 @@ public class Main {
                                 10. Añadir un resultado a un enfrentamiento.
                                 11. Ver la puntuacion de un equipo.
                                 """;
+    }
+
+    public static void opcionesSinJuego() {
+        Scanner sc = new Scanner(System.in);
+        boolean yes = true;
+        do {
+            try {
+                System.out.println(opcionesSinJuego);
+                int opcion = sc.nextInt();
+                switch (opcion) {
+                    case 1 -> juegoController.anadirJuego();
+                    case 2 -> juegoController.eliminarJuego();
+                    case 3 -> juegoController.modificarJuego();
+                    case 4 -> juegoController.verTodosJuegos();
+                    default -> yes = validarCrearCompeticion(); //Cuando tengamos competicion pasarlo ahi
+                }
+            }catch (InputMismatchException e){
+                sc.nextLine();
+                System.out.println("Vuelve a teclear la opcion por favor " + e.getMessage()+"\n");
+                // para notificar que ha pasado, ocurre cuando se 'lia' el Scanner
+            }catch (NullPointerException e){
+                System.out.println("La opcion es nula, aconsejamos crear antes para despues modificar\n");
+            }catch (NumberFormatException e){
+                System.out.println("No se acepta ese numero " +e.getMessage() +"\n");
+            }
+        }while(yes);
+    }
+
+    public static boolean validarCrearCompeticion(){
+        boolean yes = true;
+        JuegoDAO juegoDAO = new JuegoDAO();
+        if (juegoDAO.obtenerTodosJuegos().isEmpty())
+            System.out.println("No puedes continuar porque no hay ningun juego");
+        else
+            yes = false;
+        return yes;
+    }
+
+    public static void eligeElJuego(){
+        Juego juego = juegoController.elegirElJuego();
+        equipoController.definirFechaFundacion(juego);
     }
 
     public static void opcionesSinJornadas() {
