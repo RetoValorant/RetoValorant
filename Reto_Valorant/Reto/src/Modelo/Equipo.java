@@ -28,14 +28,6 @@ public class Equipo {
         this.contJugadores = 0;
     }
 
-    public int getContJugadores() {
-        return contJugadores;
-    }
-
-    public void setContJugadores(int contJugadores) {
-        this.contJugadores = contJugadores;
-    }
-
     public Equipo(int codEquipo, String nombre, LocalDate fechaFundacion, int puntuacion, ArrayList<Jugador> listaJugadores) {
         this.codEquipo = codEquipo;
         this.nombre = nombre;
@@ -103,8 +95,16 @@ public class Equipo {
     }
     @Override
     public String toString() {
-        return getNombre()+"\n" +
-                getCodEquipo()+"\n" +
-                getFechaFundacion();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nombre: " + getNombre()+"\n" +
+                "Codigo de equipo: " + getCodEquipo() + "\n" +
+                "Fecha de fundacion: " + getFechaFundacion());
+        if (!listaJugadores.isEmpty()) {
+            for (Jugador jugador : getListaJugadores()) {
+                sb.append("\nNickname: " + jugador.getNickname());
+            }
+        }else
+            sb.append("\nNo hay jugadores");
+        return sb.toString();
     }
 }
