@@ -11,14 +11,12 @@ import javax.swing.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EnfrentamientoController {
     private EquipoDAO equipoDAO;
-    private JornadaDAO jornadaDAO;
     private EnfrentamientoDAO enfrentamientoDAO;
     ArrayList<Enfrentamiento> enfrentamientos;
     ArrayList<Enfrentamiento> enfrentamientosMitad1;
@@ -26,21 +24,18 @@ public class EnfrentamientoController {
     ArrayList<Equipo> equipos;
 
     public void crearEnfrentamientos() {
-        boolean yes = true;
         declararVariables();
         try {
             primeraMitad();
             segundaMitad();
             decirEnfrentamientos();
-            yes = false;
         } catch (IllegalArgumentException e) {
             System.out.println("No se han encontrado equipos. " + e.getMessage());
-            yes = true;
         }
     }
     private void declararVariables(){
         enfrentamientoDAO = new EnfrentamientoDAO();
-        jornadaDAO = new JornadaDAO();
+        JornadaDAO jornadaDAO = new JornadaDAO();
         equipoDAO = new EquipoDAO();
         enfrentamientos = enfrentamientoDAO.getEnfrentamientos();
         enfrentamientosMitad1 = new ArrayList<>();
@@ -60,24 +55,19 @@ public class EnfrentamientoController {
     private void segundaMitad(){
         Random rand = new Random();
         for (int p = jornadas.size()/2; p < jornadas.size(); p++) {
-                Enfrentamiento enfrentamiento = new Enfrentamiento();
-                enfrentamiento.setHora(elegirHora());
-                enfrentamiento.setJornada(jornadas.get(p));
-                int enfre = rand.nextInt(enfrentamientosMitad1.size());
-                enfrentamiento.setEquipo1(enfrentamientosMitad1.get(enfre).getEquipo2());
-                enfrentamiento.setEquipo2(enfrentamientosMitad1.get(enfre).getEquipo1());
-                enfrentamientosMitad1.remove(enfre);
-                enfrentamientoDAO.anadirEnfrentamientos(enfrentamiento);
+            Enfrentamiento enfrentamiento = new Enfrentamiento();
+            enfrentamiento.setHora(elegirHora());
+            enfrentamiento.setJornada(jornadas.get(p));
+            int enfre = rand.nextInt(enfrentamientosMitad1.size());
+            enfrentamiento.setEquipo1(enfrentamientosMitad1.get(enfre).getEquipo2());
+            enfrentamiento.setEquipo2(enfrentamientosMitad1.get(enfre).getEquipo1());
+            enfrentamientosMitad1.remove(enfre);
+            enfrentamientoDAO.anadirEnfrentamientos(enfrentamiento);
         }
     }
     private void decirEnfrentamientos(){
         for (Enfrentamiento enfrentamiento : enfrentamientos) {
-            System.out.println(enfrentamiento.getHora() + " " + enfrentamiento.getEquipo1().getNombre() + " " +
-                    enfrentamiento.getEquipo1().getCodEquipo() + " " + enfrentamiento.getEquipo1().getFechaFundacion()
-                    + " " + enfrentamiento.getEquipo2().getNombre() + " " +
-                    enfrentamiento.getEquipo2().getCodEquipo() + " " + enfrentamiento.getEquipo2().getFechaFundacion()
-                    + " " + enfrentamiento.getJornada().getFechaInicio()+ " " +
-                    enfrentamiento.getJornada().getNumJornada());
+            JOptionPane.showMessageDialog(null,enfrentamiento.toString());
         }
     }
     private void hacerEnfrentamiento(int p){
@@ -129,7 +119,7 @@ public class EnfrentamientoController {
         return equipos.get(eq1);
     }
     public void verEnfrentamientosJornada(){
-        String[] nombres = jornadas.stream().map(Jornada::getNumJornada).toArray(String[]::new);
+        Integer[] nombres = jornadas.stream().map(Jornada::getNumJornada).toArray(Integer[]::new);
         do {
             String jornadaElegida = (String) JOptionPane.showInputDialog(null,
                     "Elija el numero de la jornada de la que quiere ver sus enfrentamientos",
@@ -214,10 +204,13 @@ public class EnfrentamientoController {
         for(int i = 0; i < en.size(); i++) {
             equipos.stream().map(Equipo::getNombre).forEach(nombresList::add);
         }
+        //es necesario este for? .add añade en la siguiente posicion libre
         String[] nombres = new String[nombresList.size()];
         for (int i = 0; i < nombresList.size(); i++) {
             nombres[i] = nombresList.get(i);
         }
+        //este for igual, podemos usar LAMBDA
+
         Enfrentamiento enfrentamientoReturn = new Enfrentamiento();
         boolean fallo;
         do {
@@ -233,7 +226,7 @@ public class EnfrentamientoController {
                 JOptionPane.showMessageDialog(null,"El numero no puede ser nulo");
                 fallo = true;
             }else {
-                en.stream().filter(enfrentamiento -> enfrentamiento.getEquipo2().getNombre().equals(equipoElegido));
+                en.stream().filter(enfrentamiento -> enfrentamiento.getEquipo2().getNombre().equals(equipoElegido)).findFirst().orElse(null);
                 fallo = false;
             }
         }while (fallo);
@@ -242,7 +235,7 @@ public class EnfrentamientoController {
     private void ponerResultados(Enfrentamiento enfrentamiento){
         boolean isValid = false;
         Pattern pattern = Pattern.compile("^[0-9]{2}-[0-9]{2}$");
-        String var="";
+        String var;
         int resultadoEq1 = 0;
         int resultadoEq2 = 0;
         do {
@@ -254,11 +247,9 @@ public class EnfrentamientoController {
                     resultadoEq2 = Integer.parseInt(var.substring(3,5));
                     if (resultadoEq1 == resultadoEq2) {
                         JOptionPane.showMessageDialog(null,"Los equipos no pueden empatar");
-                        isValid = false;
                     }else if (resultadoEq1 > 13 || resultadoEq2 > 13) {
                         if (resultadoEq1-resultadoEq2 != 2 && resultadoEq2-resultadoEq1 != 2) {
                             JOptionPane.showMessageDialog(null, "Si los equipos han hecho mas de 12 rondas, tiene que haber diferencia de 2 rondas ganadas entre ellos.");
-                            isValid = false;
                         }else
                             isValid = true;
                     }else

@@ -8,6 +8,7 @@ import Nacionalidades.Country;
 
 import javax.swing.*;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -80,7 +81,7 @@ public class JugadorController {
                 if (matcher.matches()) {
                     isValid = true;
                 }else {
-                    System.out.println(dato + " no utiliza un formato valido");
+                    JOptionPane.showMessageDialog(null,dato + " no utiliza un formato valido");
                 }
 
             }catch (NullPointerException e){
@@ -102,12 +103,12 @@ public class JugadorController {
                 if (matcher.matches()) {
                     var = getCodigoOSI(var);
                     if (var == null) {
-                        System.out.println("Nacionalidad no encontrada");
+                        JOptionPane.showMessageDialog(null,"Nacionalidad no encontrada");
                     }else {
                         isValid = true;
                     }
                 }else {
-                    System.out.println("Nacionalidad no utiliza un formato valido");
+                    JOptionPane.showMessageDialog(null,"Nacionalidad no utiliza un formato valido");
                 }
 
             }catch (NullPointerException e){
@@ -131,8 +132,17 @@ public class JugadorController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         do {
             try {
-                String fecha = JOptionPane.showInputDialog(null,"Ingresa la fecha de nacimiento");
+                String fecha = JOptionPane.showInputDialog(null,"Ingresa la fecha de nacimiento dd/mm/aaaa");
                 fechaNacimiento = LocalDate.parse(fecha, formatter);
+                Period period = Period.between(fechaNacimiento, LocalDate.now());
+                if (fechaNacimiento.isAfter(LocalDate.now())) {
+                    JOptionPane.showMessageDialog(null,"La fecha de nacimiento no puede ser posterior a la fecha actual.");
+
+                } else if (period.getYears() < 16 || period.getYears() > 65) {
+                    JOptionPane.showMessageDialog(null,"El juador debe de tener una edad entre 16 y 65");
+
+                }
+
                 isValid = true;
             }catch (DateTimeParseException e){
                 System.out.println("Ingresa una fecha en el formato adecuado.");
@@ -156,7 +166,7 @@ public class JugadorController {
             }catch (NullPointerException e){
                 System.out.println("No se puede ingresar el sueldo vacio.");
             }catch (NumberFormatException e){
-                JOptionPane.showMessageDialog(null,"Numero no aceptado " + e.getMessage());
+                System.out.println("Numero no aceptado " + e.getMessage());
             }
         }while (!isValid);
         return sueldo;
@@ -319,6 +329,7 @@ public class JugadorController {
             }
         }while (JOptionPane.showConfirmDialog(null,"Quiere continuar viendo jugadores?") == 0);
     }
+    //tenemos que usar estas funciones para
     private void mostrarJugadoresRepetidos(List<Jugador> nombresIguales) {
 
         String[] opciones = nombresIguales.stream()
