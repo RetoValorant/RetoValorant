@@ -247,7 +247,9 @@ public class JugadorController {
                     case "Fecha de nacimiento" -> j.setFechaNacimiento(this.validarFechaNacimiento());
                     case "Nickname" -> j.setNickname(this.validarNomApeNik("Nickname", "Ingresa el nickname del jugador.", "\\S{3,16}"));
                     case "Sueldo" -> j.setSueldo(this.validarSueldo());
-                    case "Equipo" -> j.setEquipo(this.validarEquipos());
+                    case "Equipo" -> {j.getEquipo().getListaJugadores().remove(j);
+                                        j.setEquipo(this.validarEquipos());
+                                        equipoDAO.anadirJugador(j.getEquipo(),j);}
                     default -> JOptionPane.showMessageDialog(null,"No se puede modificar eso en el jugador");
                 }
             }

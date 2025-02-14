@@ -149,13 +149,38 @@ public class Main {
 
     public static void opcionesConJornadas() {
         Scanner sc = new Scanner(System.in);
-        boolean yes = true;
+        boolean yes=true;
         do {
-            System.out.println(opcionesConJornadas);
-            int opcion = sc.nextInt();
-            switch (opcion) {
-                case 1 -> jornadaController.validarCreacionJornada();
-                default -> yes = false;
+            try {
+                System.out.println(opcionesConJornadas);
+                int opcion = sc.nextInt();
+                switch (opcion) {
+                    case 1 -> jugadorController.modificarJugador();
+                    case 2 -> equipoController.modificarEquipo();
+                    case 3 -> jugadorController.verTodosJugadores();
+                    case 4 -> equipoController.verTodosEquipos();
+                    case 5 -> jugadorController.verPorNombre();
+                    case 6 -> equipoController.verPorNombre();
+                    case 7 -> equipoController.verJugadores();
+                    case 8 -> enfrentamientoController.verEnfrentamientosJornada();
+                    case 9 -> enfrentamientoController.verEnfrentamientosEquipo();
+                    case 10 -> enfrentamientoController.anadirResultado();
+                    case 11 -> equipoController.verPuntuacionEquipo();
+                    default -> {
+                        yes = jornadaController.validarCreacionJornada();
+                        if (!yes)
+                            enfrentamientoController.crearEnfrentamientos();
+                    }
+                }
+            }catch (InputMismatchException e){
+                sc.nextLine();
+                System.out.println("Vuelve a teclear la opcion por favor " + e.getMessage()+"\n");
+                // para notificar que ha pasado, ocurre cuando se 'lia' el Scanner
+            }catch (NullPointerException e){
+                System.out.println("La opcion es nula, aconsejamos crear antes para despues modificar\n");
+                yes = true;
+            }catch (NumberFormatException e){
+                System.out.println("No se acepta ese numero " +e.getMessage() +"\n");
             }
         }while(yes);
     }

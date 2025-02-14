@@ -129,7 +129,7 @@ public class EquipoController{
             }catch (NullPointerException e){
                 continuar = false;
             }
-        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar modificando equipos?") == 1);
+        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar modificando equipos?") == 0);
         //sale de repetitiva
         if (continuar)
             opcionesModificar(eq);
@@ -251,6 +251,27 @@ public class EquipoController{
                             JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                             null, options, options[0]);
                 }
+            }
+        }while (JOptionPane.showConfirmDialog(null,"quiere continuar viendo equipos?") == 0);
+    }
+    public void verPuntuacionEquipo(){
+        String[] nombres = eDAO.obtenerTodosLosEquipos().stream().map(Equipo::getNombre).toArray(String[]::new);
+        do {
+            String equipoElegido = (String) JOptionPane.showInputDialog(null,
+                    "Elija el nombre del equipo que quiere ver su puntuacion",
+                    "Opciones",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    nombres,
+                    nombres[0]
+            );
+            if (equipoElegido == null || equipoElegido.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null,"El nombre no puede ser nulo");
+            }else {
+
+                Equipo e = eDAO.obtenerTodosLosEquipos().stream().filter(equipo -> equipo.getNombre().equals(equipoElegido)).findFirst().orElse(null);
+
+                JOptionPane.showMessageDialog(null, Objects.requireNonNull(e).getPuntuacion());
             }
         }while (JOptionPane.showConfirmDialog(null,"quiere continuar viendo equipos?") == 0);
     }
