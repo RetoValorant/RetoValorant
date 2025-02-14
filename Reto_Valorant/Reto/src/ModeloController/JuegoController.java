@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -92,33 +93,38 @@ public class JuegoController {
         return fechaPars;
     }
     public void modificarJuego(){
-        Juego j = new Juego();
-        ArrayList<Juego> juegos = juegoDAO.obtenerTodosJuegos();
-        boolean continuar;
-        do {
-            try {
-                String opc= (String) JOptionPane.showInputDialog(null,
-                        "Que Juego?",
-                        "Opciones",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        juegos.stream().map(Juego::getNombre).toArray(String[]::new),
-                        juegos.getFirst().getNombre()
-                );
-                if (opc==null || opc.isEmpty()) {
+        try {
+            Juego j = new Juego();
+            ArrayList<Juego> juegos = juegoDAO.obtenerTodosJuegos();
+            boolean continuar;
+            do {
+                try {
+                    String opc = (String) JOptionPane.showInputDialog(null,
+                            "Que Juego?",
+                            "Opciones",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            juegos.stream().map(Juego::getNombre).toArray(String[]::new),
+                            juegos.getFirst().getNombre()
+                    );
+                    if (opc == null || opc.isEmpty()) {
+                        continuar = false;
+                    } else {
+                        j = juegoDAO.obtenerTodosJuegos().stream().filter(juego -> juego.getNombre().equals(opc)).findFirst().orElse(null);
+                        //con solo el nombre obtiene todos los datos de Equipo eq
+                        continuar = true;
+                    }
+                } catch (NullPointerException e) {
                     continuar = false;
-                }else {
-                    j = juegoDAO.obtenerTodosJuegos().stream().filter(juego -> juego.getNombre().equals(opc)).findFirst().orElse(null);
-                    //con solo el nombre obtiene todos los datos de Equipo eq
-                    continuar = true;
                 }
-            }catch (NullPointerException e){
-                continuar = false;
-            }
-        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar modificando juegos?") == 0);
-        //sale de repetitiva
-        if (continuar)
-            opcionesModificar(j);
+            } while (JOptionPane.showConfirmDialog(null, "Quiere continuar modificando juegos?") == 0);
+            //sale de repetitiva
+            if (continuar)
+                opcionesModificar(j);
+        }catch (NoSuchElementException e){
+            JOptionPane.showMessageDialog(null, "¡No puedes continuar porque no hay ningun juego!",
+                    "No hay juegos", JOptionPane.WARNING_MESSAGE);
+        }
     }
     private void opcionesModificar(Juego j){
         String[] opc = {"Nombre","Fecha de salida"};
@@ -145,45 +151,55 @@ public class JuegoController {
         }
     }
     public void eliminarJuego(){
-        Juego j = new Juego();
-        ArrayList<Juego> juegos = juegoDAO.obtenerTodosJuegos();
-        boolean continuar = false;
-        do {
-            try {
-                String opc= (String) JOptionPane.showInputDialog(null,
-                        "Que juego quiere eliminar?",
-                        "Opciones",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        juegos.stream().map(Juego::getNombre).toArray(String[]::new),
-                        juegos.getFirst().getNombre()
-                );
-                if (opc==null || opc.isEmpty()) {
+        try {
+            Juego j = new Juego();
+            ArrayList<Juego> juegos = juegoDAO.obtenerTodosJuegos();
+            boolean continuar = false;
+            do {
+                try {
+                    String opc = (String) JOptionPane.showInputDialog(null,
+                            "Que juego quiere eliminar?",
+                            "Opciones",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            juegos.stream().map(Juego::getNombre).toArray(String[]::new),
+                            juegos.getFirst().getNombre()
+                    );
+                    if (opc == null || opc.isEmpty()) {
+                        continuar = false;
+                    } else if (juegoDAO.obtenerTodosJuegos().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "No hay juegos para eliminar");
+                    } else {
+                        j = juegoDAO.obtenerTodosJuegos().stream().filter(juego -> juego.getNombre().equals(opc)).findFirst().orElse(null);
+                        continuar = true;
+                        //con solo el nombre obtiene todos los datos de Equipo eq
+                    }
+                } catch (NullPointerException e) {
                     continuar = false;
-                }else if (juegoDAO.obtenerTodosJuegos().isEmpty()){
-                        JOptionPane.showMessageDialog(null,"No hay juegos para eliminar");
-                }else {
-                    j = juegoDAO.obtenerTodosJuegos().stream().filter(juego -> juego.getNombre().equals(opc)).findFirst().orElse(null);
-                    continuar = true;
-                    //con solo el nombre obtiene todos los datos de Equipo eq
                 }
-            }catch (NullPointerException e){
-                continuar = false;
-            }
-        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar eliminando juegos?") == 0 && juegoDAO.obtenerTodosJuegos().isEmpty());
-        //sale de repetitiva con respuesta de usuario o si no hay mas juegos para eliminar
-        if (continuar)
-            juegoDAO.eliminarJuego(Objects.requireNonNull(j).getCodjuego());
+            } while (JOptionPane.showConfirmDialog(null, "Quiere continuar eliminando juegos?") == 0 && juegoDAO.obtenerTodosJuegos().isEmpty());
+            //sale de repetitiva con respuesta de usuario o si no hay mas juegos para eliminar
+            if (continuar)
+                juegoDAO.eliminarJuego(Objects.requireNonNull(j).getCodjuego());
+        }catch (NoSuchElementException e){
+            JOptionPane.showMessageDialog(null, "¡No puedes continuar porque no hay ningun juego!",
+                    "No hay juegos", JOptionPane.WARNING_MESSAGE);
+        }
     }
     public void verTodosJuegos(){
         try {
             ArrayList<Juego> juegos = juegoDAO.obtenerTodosJuegos();
-            for (Juego j : juegos){
-                Object[] options = { "OK", "CANCEL"};
-                JOptionPane.showOptionDialog(null, j.toString(), "Continuar",
-                        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-                        null, options, options[0]);
-                //Arreglado
+            if (!juegos.isEmpty()) {
+                for (Juego j : juegos) {
+                    Object[] options = {"OK", "CANCEL"};
+                    JOptionPane.showOptionDialog(null, j.toString(), "Continuar",
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                            null, options, options[0]);
+                    //Arreglado
+                }
+            }else {
+                JOptionPane.showMessageDialog(null, "¡No puedes ver los juegos porque no hay ningun juego!",
+                        "No hay juegos", JOptionPane.WARNING_MESSAGE);
             }
         }catch (NullPointerException e){
             System.out.println("No hay juegos para enseñar");

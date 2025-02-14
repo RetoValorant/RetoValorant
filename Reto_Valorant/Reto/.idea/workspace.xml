@@ -4,15 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f44a7a43-f27e-4c5b-acac-97da0bb0afcd" name="Changes" comment="Funciona jornadas si no hay equipos">
+    <list default="true" id="f44a7a43-f27e-4c5b-acac-97da0bb0afcd" name="Changes" comment="Opciones con Jornada hecho al completo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/Modelo/Enfrentamiento.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/Modelo/Enfrentamiento.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/Modelo/Equipo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/Modelo/Equipo.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloController/EnfrentamientoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloController/EnfrentamientoController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloController/EquipoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloController/EquipoController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloController/JornadaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloController/JornadaController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloController/JugadorController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloController/JugadorController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloDAO/EnfrentamientoDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloDAO/EnfrentamientoDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Reto/ModeloDAO/JornadaDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Reto/ModeloDAO/JornadaDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Modelo/Equipo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modelo/Equipo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Modelo/Enfrentamiento.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Modelo/Enfrentamiento.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ModeloController/EnfrentamientoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloController/EnfrentamientoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ModeloController/EquipoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloController/EquipoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ModeloController/JornadaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloController/JornadaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ModeloController/JuegoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloController/JuegoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ModeloController/JugadorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ModeloController/JugadorController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,18 +31,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "AaronJimenez-dev"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;AaronJimenez-dev&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/AaronJimenez-dev/RetoValorant.git",
-    "accountId": "234783be-3148-4380-94cb-d7b8b1c87e8b"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/AaronJimenez-dev/RetoValorant.git&quot;,
+    &quot;accountId&quot;: &quot;234783be-3148-4380-94cb-d7b8b1c87e8b&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -45,7 +53,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Main.executor": "Debug",
+    "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
@@ -93,7 +101,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739449185295</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Opciones con Jornada hecho al completo">
+      <option name="closed" value="true" />
+      <created>1739523471298</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1739523471298</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -102,6 +118,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Ya funciona equipos y jugador" />
     <MESSAGE value="Funciona jornadas si no hay equipos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Funciona jornadas si no hay equipos" />
+    <MESSAGE value="Opciones con Jornada hecho al completo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Opciones con Jornada hecho al completo" />
   </component>
 </project>

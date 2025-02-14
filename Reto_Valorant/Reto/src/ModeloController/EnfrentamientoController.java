@@ -12,8 +12,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class EnfrentamientoController {
     private EquipoDAO equipoDAO;
@@ -28,7 +30,6 @@ public class EnfrentamientoController {
         try {
             primeraMitad();
             segundaMitad();
-            decirEnfrentamientos();
         } catch (IllegalArgumentException e) {
             System.out.println("No se han encontrado equipos. " + e.getMessage());
         }
@@ -65,11 +66,6 @@ public class EnfrentamientoController {
             enfrentamientoDAO.anadirEnfrentamientos(enfrentamiento);
         }
     }
-    private void decirEnfrentamientos(){
-        for (Enfrentamiento enfrentamiento : enfrentamientos) {
-            JOptionPane.showMessageDialog(null,enfrentamiento.toString());
-        }
-    }
     private void hacerEnfrentamiento(int p){
         for (int i = 0; i <= equipos.size()/2; i++) {
             Enfrentamiento enfrentamiento = new Enfrentamiento();
@@ -81,9 +77,21 @@ public class EnfrentamientoController {
 
             equipos.remove(enfrentamiento.getEquipo2());
             enfrentamiento.setJornada(jornadas.get(p));
+            enfrentamiento.setIdEnfrentamiento(generarIdEnfrentamiento());
             enfrentamientoDAO.anadirEnfrentamientos(enfrentamiento);
             enfrentamientosMitad1.add(enfrentamiento);
         }
+    }
+    private int generarIdEnfrentamiento(){
+        Set<Integer> codigosEquipo = enfrentamientoDAO.getEnfrentamientos()
+                .stream().map(Enfrentamiento::getIdEnfrentamiento)
+                .collect(Collectors.toSet());
+        int idEnfrentamiento = 0;
+        while (codigosEquipo.contains(idEnfrentamiento)) {
+            idEnfrentamiento++;
+            //hasta que no encuentra un nuevo codigo no sale del loop
+        }
+        return idEnfrentamiento;
     }
     private void noSeHanEnfrentado(Enfrentamiento enfrentamiento){
         boolean yes = false;
@@ -121,7 +129,7 @@ public class EnfrentamientoController {
     public void verEnfrentamientosJornada(){
         Integer[] nombres = jornadas.stream().map(Jornada::getNumJornada).toArray(Integer[]::new);
         do {
-            String jornadaElegida = (String) JOptionPane.showInputDialog(null,
+            int jornadaElegida = (Integer) JOptionPane.showInputDialog(null,
                     "Elija el numero de la jornada de la que quiere ver sus enfrentamientos",
                     "Opciones",
                     JOptionPane.PLAIN_MESSAGE,
@@ -129,19 +137,14 @@ public class EnfrentamientoController {
                     nombres,
                     nombres[0]
             );
-            if (jornadaElegida == null || jornadaElegida.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(null,"El numero no puede ser nulo");
-            }else {
-                int jornadaElegidaNumero = Integer.parseInt(jornadaElegida);
-                ArrayList<Enfrentamiento> en = new ArrayList<>();
-                enfrentamientos.stream().filter(enfrentamiento -> enfrentamiento.getJornada().getNumJornada() == jornadaElegidaNumero).forEach(en::add);
+            ArrayList<Enfrentamiento> en = new ArrayList<>();
+            enfrentamientos.stream().filter(enfrentamiento -> enfrentamiento.getJornada().getNumJornada() == jornadaElegida).forEach(en::add);
 
-                for (Enfrentamiento enfrentamiento : en) {
-                    Object[] options = { "OK", "CANCEL"};
-                    JOptionPane.showOptionDialog(null, enfrentamiento.toString(), "Continuar",
-                            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-                            null, options, options[0]);
-                }
+            for (Enfrentamiento enfrentamiento : en) {
+                Object[] options = { "OK", "CANCEL"};
+                JOptionPane.showOptionDialog(null, enfrentamiento.toString(), "Continuar",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                        null, options, options[0]);
             }
         }while (JOptionPane.showConfirmDialog(null,"quiere continuar viendo enfrentamientos por jornada?") == 0);
     }
@@ -215,7 +218,7 @@ public class EnfrentamientoController {
         boolean fallo;
         do {
             String equipoElegido = (String) JOptionPane.showInputDialog(null,
-                    "¿Cual es el primer equipo?",
+                    "¿Cual es el segundo equipo?",
                     "Opciones",
                     JOptionPane.PLAIN_MESSAGE,
                     null,
@@ -226,7 +229,7 @@ public class EnfrentamientoController {
                 JOptionPane.showMessageDialog(null,"El numero no puede ser nulo");
                 fallo = true;
             }else {
-                en.stream().filter(enfrentamiento -> enfrentamiento.getEquipo2().getNombre().equals(equipoElegido)).findFirst().orElse(null);
+                enfrentamientoReturn = en.stream().filter(enfrentamiento -> enfrentamiento.getEquipo2().getNombre().equals(equipoElegido)).findFirst().orElse(null);
                 fallo = false;
             }
         }while (fallo);

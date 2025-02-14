@@ -40,30 +40,30 @@ public class Main {
         };
 
         opcionesSinJornadas = new String[]{
-                "1. Crear un Jugador",
-                "2. Crear un Equipo",
-                "3. Modificar un Jugador",
-                "4. Modificar un Equipo",
-                "5. Eliminar un Jugador",
-                "6. Eliminar un Equipo",
-                "7. Ver todos los jugadores",
-                "8. Ver todos los equipos",
-                "9. Ver informacion de un jugador en concreto",
+                "01. Crear un Jugador",
+                "02. Crear un Equipo",
+                "03. Modificar un Jugador",
+                "04. Modificar un Equipo",
+                "05. Eliminar un Jugador",
+                "06. Eliminar un Equipo",
+                "07. Ver todos los jugadores",
+                "08. Ver todos los equipos",
+                "09. Ver informacion de un jugador en concreto",
                 "10. Ver informacion de un equipo en concreto",
                 "11. Ver los jugadores de un equipo",
                 "12. Crear las jornadas"
         };
 
         opcionesConJornadas = new String[]{
-                "1. Modificar un Jugador",
-                "2. Modificar un Equipo",
-                "3. Ver todos los jugadores",
-                "4. Ver todos los equipos",
-                "5. Ver informacion de un jugador en concreto",
-                "6. Ver informacion de un equipo en concreto",
-                "7. Ver los jugadores de un equipo",
-                "8. Ver los enfrentamientos de una jornada",
-                "9. Ver los enfrentamientos de un equipo",
+                "01. Modificar un Jugador",
+                "02. Modificar un Equipo",
+                "03. Ver todos los jugadores",
+                "04. Ver todos los equipos",
+                "05. Ver informacion de un jugador en concreto",
+                "06. Ver informacion de un equipo en concreto",
+                "07. Ver los jugadores de un equipo",
+                "08. Ver los enfrentamientos de una jornada",
+                "09. Ver los enfrentamientos de un equipo",
                 "10. Añadir un resultado a un enfrentamiento",
                 "11. Ver la puntuacion de un equipo"
         };
@@ -108,7 +108,8 @@ public class Main {
         boolean yes = true;
         JuegoDAO juegoDAO = new JuegoDAO();
         if (juegoDAO.obtenerTodosJuegos().isEmpty())
-            System.out.println("No puedes continuar porque no hay ningun juego");
+            JOptionPane.showMessageDialog(null, "¡No puedes continuar porque no hay ningun juego!",
+                    "No hay juegos", JOptionPane.WARNING_MESSAGE);
         else
             yes = false;
         return yes;
@@ -135,7 +136,7 @@ public class Main {
                         opcionesSinJornadas[0]
                 );
 
-                int opcion = Integer.parseInt(o.substring(0, 1));
+                int opcion = Integer.parseInt(o.substring(0, 2));
 
                 switch (opcion) {
                     case 1 -> jugadorController.dataValidation();
@@ -181,7 +182,7 @@ public class Main {
                     opcionesConJornadas[0]
             );
 
-            int opcion = Integer.parseInt(o.substring(0, 1));
+            int opcion = Integer.parseInt(o.substring(0, 2));
 
             switch (opcion) {
                 case 1 -> jornadaController.validarCreacionJornada();
@@ -191,11 +192,10 @@ public class Main {
                 case 5 -> jugadorController.verPorNombre();
                 case 6 -> equipoController.verPorNombre();
                 case 7 -> equipoController.verJugadores();
-
-                case 8 -> enfrentamientoController.verEnfrentamientosJornada(); //no esta hecho
-                case 9 -> enfrentamientoController.verEnfrentamientosEquipo(); //no esta hecho
-                case 10 -> enfrentamientoController.anadirResultado(); //ya existe
-                case 11 -> enfrentamientoController.verPuntuacionEquipo(); //en proceso
+                case 8 -> enfrentamientoController.verEnfrentamientosJornada();
+                case 9 -> enfrentamientoController.verEnfrentamientosEquipo();
+                case 10 -> enfrentamientoController.anadirResultado();
+                case 11 -> equipoController.verPuntuacionEquipo();
                 default -> yes = false;
             }
         }while(yes);

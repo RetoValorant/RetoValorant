@@ -40,8 +40,11 @@ public class JornadaController {
                 competicionController.actualizarCompeticion(jornadas.getLast().getCompeticion());
                 resultado = false;
             } else {
-                JOptionPane.showMessageDialog(null,"La cantidad de equipos no es par");
+                JOptionPane.showMessageDialog(null, "La cantidad de equipos no es par");
             }
+        }catch (NoSuchElementException e){
+            JOptionPane.showMessageDialog(null, "¡No puedes continuar porque no hay ningun equipo!",
+                    "No hay juegos", JOptionPane.WARNING_MESSAGE);
         }catch (NullPointerException e){
             System.out.println("No existe ningun equipo.");
         }
