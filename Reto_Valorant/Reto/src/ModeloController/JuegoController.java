@@ -1,6 +1,5 @@
 package ModeloController;
 
-import Modelo.Equipo;
 import Modelo.Juego;
 import ModeloDAO.JuegoDAO;
 
@@ -47,12 +46,10 @@ public class JuegoController {
         String var = "";
         boolean isFinished = false;
         Pattern p = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9 _-]{3,15}$"); //15 como mucho como en MER/MR
-
         do {
             try {
                 var = JOptionPane.showInputDialog(null, "Ingrese el nombre del juego");
                 Matcher matcher = p.matcher(var);
-
                 if (var.trim().isBlank()){
                     JOptionPane.showMessageDialog(null, "El nombre del juego no puede ser nulo");
                 } else if (matcher.matches()) {
@@ -97,7 +94,7 @@ public class JuegoController {
     public void modificarJuego(){
         Juego j = new Juego();
         ArrayList<Juego> juegos = juegoDAO.obtenerTodosJuegos();
-        boolean continuar = false;
+        boolean continuar;
         do {
             try {
                 String opc= (String) JOptionPane.showInputDialog(null,
@@ -163,16 +160,18 @@ public class JuegoController {
                 );
                 if (opc==null || opc.isEmpty()) {
                     continuar = false;
+                }else if (juegoDAO.obtenerTodosJuegos().isEmpty()){
+                        JOptionPane.showMessageDialog(null,"No hay juegos para eliminar");
                 }else {
                     j = juegoDAO.obtenerTodosJuegos().stream().filter(juego -> juego.getNombre().equals(opc)).findFirst().orElse(null);
-                    //con solo el nombre obtiene todos los datos de Equipo eq
                     continuar = true;
+                    //con solo el nombre obtiene todos los datos de Equipo eq
                 }
             }catch (NullPointerException e){
                 continuar = false;
             }
-        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar eliminando juegos?") == 0);
-        //sale de repetitiva
+        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar eliminando juegos?") == 0 && juegoDAO.obtenerTodosJuegos().isEmpty());
+        //sale de repetitiva con respuesta de usuario o si no hay mas juegos para eliminar
         if (continuar)
             juegoDAO.eliminarJuego(Objects.requireNonNull(j).getCodjuego());
     }
