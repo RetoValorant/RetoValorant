@@ -81,7 +81,7 @@ public class JugadorController {
                 if (matcher.matches()) {
                     isValid = true;
                 }else {
-                    System.out.println(dato + " no utiliza un formato valido");
+                    JOptionPane.showMessageDialog(null,dato + " no utiliza un formato valido");
                 }
 
             }catch (NullPointerException e){
@@ -103,12 +103,12 @@ public class JugadorController {
                 if (matcher.matches()) {
                     var = getCodigoOSI(var);
                     if (var == null) {
-                        System.out.println("Nacionalidad no encontrada");
+                        JOptionPane.showMessageDialog(null,"Nacionalidad no encontrada");
                     }else {
                         isValid = true;
                     }
                 }else {
-                    System.out.println("Nacionalidad no utiliza un formato valido");
+                    JOptionPane.showMessageDialog(null,"Nacionalidad no utiliza un formato valido");
                 }
 
             }catch (NullPointerException e){
@@ -138,8 +138,8 @@ public class JugadorController {
                 if (fechaNacimiento.isAfter(LocalDate.now())) {
                     JOptionPane.showMessageDialog(null,"La fecha de nacimiento no puede ser posterior a la fecha actual.");
 
-                } else if (period.getYears() < 16 && period.getYears() > 65) {
-                    JOptionPane.showMessageDialog(null,"La fecha de nacimiento no puede ser anterior a 1900.");
+                } else if (period.getYears() < 16 || period.getYears() > 65) {
+                    JOptionPane.showMessageDialog(null,"El juador debe de tener una edad entre 16 y 65");
 
                 }
 
@@ -166,7 +166,7 @@ public class JugadorController {
             }catch (NullPointerException e){
                 System.out.println("No se puede ingresar el sueldo vacio.");
             }catch (NumberFormatException e){
-                JOptionPane.showMessageDialog(null,"Numero no aceptado " + e.getMessage());
+                System.out.println("Numero no aceptado " + e.getMessage());
             }
         }while (!isValid);
         return sueldo;
@@ -327,6 +327,7 @@ public class JugadorController {
             }
         }while (JOptionPane.showConfirmDialog(null,"Quiere continuar viendo jugadores?") == 0);
     }
+    //tenemos que usar estas funciones para
     private void mostrarJugadoresRepetidos(List<Jugador> nombresIguales) {
 
         String[] opciones = nombresIguales.stream()

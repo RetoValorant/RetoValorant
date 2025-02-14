@@ -60,7 +60,7 @@ public class JuegoController {
             } catch (NumberFormatException e) {
                 System.out.println("El nombre del juego NO debe ser menor que 3 o mayor que 15");
             } catch (NullPointerException e) {
-                JOptionPane.showMessageDialog(null, "No se admite valor nulo");
+                System.out.println("No se admite valor nulo");
             }
         } while(!isFinished);
 
@@ -86,7 +86,7 @@ public class JuegoController {
             } catch (NumberFormatException | DateTimeParseException e) {
                 System.out.println(fechaNOpars + " error al parsear la fecha : " +e.getMessage());
             } catch (NullPointerException e) {
-                JOptionPane.showMessageDialog(null, fechaNOpars + " no puede ser nulo");
+                System.out.println(fechaNOpars + " no puede ser nulo");
             }
         } while(!validFecha);
         return fechaPars;
