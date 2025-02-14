@@ -28,26 +28,31 @@ public class JugadorController {
     }
 
     public void dataValidation(){
-        this.declararVariables();
-        if (this.validarCreacion()) {
-            Jugador j = new Jugador();
-            j.setCodJugador(this.generarCodJugador());
-            j.setNombre(this.validarNomApeNik("Nombre", "Ingresa el nombre del jugador.", "^[A-ZÁÉÍÓÚÑÄËÏÖÜ][a-záéíóúñäëïöü\\s]*$"));
-            j.setApellido(this.validarNomApeNik("Apellido", "Ingresa el apellido del jugador.", "^[A-ZÁÉÍÓÚÑÄËÏÖÜ][a-záéíóúñäëïöü\\s]*$"));
-            j.setNacionalidad(this.validarNacionalidad());
-            j.setFechaNacimiento(this.validarFechaNacimiento());
-            //j.setRol(RolController.validarRol());
-            j.setNickname(this.validarNomApeNik("Nickname", "Ingresa el nickname del jugador.", "\\S{3,16}"));
-            j.setSueldo(this.validarSueldo());
-            Equipo equipo = this.validarEquipos();
-            j.setEquipo(equipo);
-            //Si este metodo devuelve null hay que dar una opcion de modificar jugador para dar de alta en un equipo
-            jugadorDAO.agregar(j);
-            if (equipo != null) {
-                equipoDAO.anadirJugador(equipo, j);
+        try{
+            this.declararVariables();
+            if (this.validarPoderUsar()) {
+                Jugador j = new Jugador();
+                j.setCodJugador(this.generarCodJugador());
+                j.setNombre(this.validarNomApeNik("Nombre", "Ingresa el nombre del jugador.", "^[A-ZÁÉÍÓÚÑÄËÏÖÜ][a-záéíóúñäëïöü\\s]*$"));
+                j.setApellido(this.validarNomApeNik("Apellido", "Ingresa el apellido del jugador.", "^[A-ZÁÉÍÓÚÑÄËÏÖÜ][a-záéíóúñäëïöü\\s]*$"));
+                j.setNacionalidad(this.validarNacionalidad());
+                j.setFechaNacimiento(this.validarFechaNacimiento());
+                //j.setRol(RolController.validarRol());
+                j.setNickname(this.validarNomApeNik("Nickname", "Ingresa el nickname del jugador.", "\\S{3,16}"));
+                j.setSueldo(this.validarSueldo());
+                Equipo equipo = this.validarEquipos();
+                j.setEquipo(equipo);
+                //Si este metodo devuelve null hay que dar una opcion de modificar jugador para dar de alta en un equipo
+                jugadorDAO.agregar(j);
+                if (equipo != null) {
+                    equipoDAO.anadirJugador(equipo, j);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "No se puede crear ningún jugador hasta que exista al menos un equipo", "Error", JOptionPane.WARNING_MESSAGE);
             }
-        }else {
-            JOptionPane.showMessageDialog(null, "No se puede crear ningún jugador hasta que exista al menos un equipo", "Error", JOptionPane.ERROR_MESSAGE);
+        }catch (NoSuchElementException e){
+            JOptionPane.showMessageDialog(null, "¡No puedes continuar porque no hay ningun equipo!",
+                    "No hay juegos", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -56,7 +61,7 @@ public class JugadorController {
         jugadorDAO = new JugadorDAO();
         equipos = equipoDAO.obtenerTodosLosEquipos();
     }
-    private boolean validarCreacion(){
+    private boolean validarPoderUsar(){
         return !equipos.isEmpty();
     }
     private int generarCodJugador(){
@@ -137,13 +142,12 @@ public class JugadorController {
                 Period period = Period.between(fechaNacimiento, LocalDate.now());
                 if (fechaNacimiento.isAfter(LocalDate.now())) {
                     JOptionPane.showMessageDialog(null,"La fecha de nacimiento no puede ser posterior a la fecha actual.");
-
+                    isValid = false;
                 } else if (period.getYears() < 16 || period.getYears() > 65) {
                     JOptionPane.showMessageDialog(null,"El juador debe de tener una edad entre 16 y 65");
-
-                }
-
-                isValid = true;
+                    isValid = false;
+                }else
+                    isValid = true;
             }catch (DateTimeParseException e){
                 System.out.println("Ingresa una fecha en el formato adecuado.");
             }catch (NullPointerException e){
@@ -152,12 +156,12 @@ public class JugadorController {
         }while (!isValid);
         return fechaNacimiento;
     }
-    private int validarSueldo(){
+    private double validarSueldo(){
         boolean isValid = false;
-        int sueldo = 0;
+        double sueldo = 0;
         do {
             try {
-                sueldo = Integer.parseInt(JOptionPane.showInputDialog(null,"Ingresa el sueldo del jugador"));
+                sueldo = Double.parseDouble(JOptionPane.showInputDialog(null,"Ingresa el sueldo del jugador"));
                 if (sueldo < SUELDO) {
                     JOptionPane.showMessageDialog(null,"El sueldo no puede ser menor que " + SUELDO);
                 }else {
@@ -212,28 +216,33 @@ public class JugadorController {
         }
     }
     public void modificarJugador(){
-        Jugador j = new Jugador();
-        ArrayList<Jugador> jugadores = jugadorDAO.obtenerTodos();
-        do {
-            try {
-                String opc= (String) JOptionPane.showInputDialog(null,
-                        "Que jugador?",
-                        "Opciones",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        jugadores.stream().map(Jugador::getNombre).toArray(String[]::new),
-                        jugadores.getFirst().getNombre()
-                );
-                if (opc==null || opc.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,"El jugador no puede ser nulo");
-                }else {
-                    j = jugadorDAO.obtenerTodos().stream().filter(jugador -> jugador.getNombre().equals(opc)).findFirst().orElse(null);
+        try {
+            Jugador j = new Jugador();
+            ArrayList<Jugador> jugadores = jugadorDAO.obtenerTodos();
+            do {
+                try {
+                    String opc = (String) JOptionPane.showInputDialog(null,
+                            "Que jugador?",
+                            "Opciones",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            jugadores.stream().map(Jugador::getNombre).toArray(String[]::new),
+                            jugadores.getFirst().getNombre()
+                    );
+                    if (opc == null || opc.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "El jugador no puede ser nulo");
+                    } else {
+                        j = jugadorDAO.obtenerTodos().stream().filter(jugador -> jugador.getNombre().equals(opc)).findFirst().orElse(null);
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("el jugador no puede ser nulo");
                 }
-            }catch (NullPointerException e){
-                System.out.println("el jugador no puede ser nulo");
-            }
-        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar modificando jugadores?")==1);
+            } while (JOptionPane.showConfirmDialog(null, "Quiere continuar modificando jugadores?") == 1);
             opcionesModificar(j);
+        }catch (NoSuchElementException e){
+            JOptionPane.showMessageDialog(null, "¡No puedes continuar porque no hay ningun jugador!",
+                    "No hay juegos", JOptionPane.WARNING_MESSAGE);
+        }
     }
     private void opcionesModificar(Jugador j){
         String[] opc = {"Nombre","Apellido","Nacionalidad","Fecha de nacimiento","Nickname","Sueldo","Equipo"};
@@ -257,7 +266,9 @@ public class JugadorController {
                     case "Fecha de nacimiento" -> j.setFechaNacimiento(this.validarFechaNacimiento());
                     case "Nickname" -> j.setNickname(this.validarNomApeNik("Nickname", "Ingresa el nickname del jugador.", "\\S{3,16}"));
                     case "Sueldo" -> j.setSueldo(this.validarSueldo());
-                    case "Equipo" -> j.setEquipo(this.validarEquipos());
+                    case "Equipo" -> {j.getEquipo().getListaJugadores().remove(j);
+                                        j.setEquipo(this.validarEquipos());
+                                        equipoDAO.anadirJugador(j.getEquipo(),j);}
                     default -> JOptionPane.showMessageDialog(null,"No se puede modificar eso en el jugador");
                 }
             }
@@ -267,33 +278,37 @@ public class JugadorController {
         }
     }
     public void eliminarJugador(){
-        Jugador j = new Jugador();
-        ArrayList<Jugador> jugadores = jugadorDAO.obtenerTodos();
-        do {
-            try {
-                String opc= (String) JOptionPane.showInputDialog(null,
-                        "Que jugador quiere eliminar?",
-                        "Opciones",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        jugadores.stream().map(Jugador::getNombre).toArray(String[]::new),
-                        jugadores.getFirst().getNombre()
-                );
-                if (opc==null || opc.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,"El jugador no puede ser nulo");
-                }else {
-                    j = jugadorDAO.obtenerTodos().stream().filter(jugador -> jugador.getNombre().equals(opc)).findFirst().orElse(null);
+        try {
+            Jugador j = new Jugador();
+            ArrayList<Jugador> jugadores = jugadorDAO.obtenerTodos();
+            do {
+                try {
+                    String opc = (String) JOptionPane.showInputDialog(null,
+                            "Que jugador quiere eliminar?",
+                            "Opciones",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            jugadores.stream().map(Jugador::getNombre).toArray(String[]::new),
+                            jugadores.getFirst().getNombre()
+                    );
+                    if (opc == null || opc.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "El jugador no puede ser nulo");
+                    } else {
+                        j = jugadorDAO.obtenerTodos().stream().filter(jugador -> jugador.getNombre().equals(opc)).findFirst().orElse(null);
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("el jugador no puede ser nulo");
                 }
-            }catch (NullPointerException e){
-                System.out.println("el jugador no puede ser nulo");
-            }
-        }while (JOptionPane.showConfirmDialog(null,"Quieere continuar eliminando juadores?")==0);
-        jugadorDAO.eliminar(Objects.requireNonNull(j).getCodJugador());
+            } while (JOptionPane.showConfirmDialog(null, "Quieere continuar eliminando juadores?") == 0);
+            jugadorDAO.eliminar(Objects.requireNonNull(j).getCodJugador());
+        }catch (NoSuchElementException e){
+            JOptionPane.showMessageDialog(null, "¡No puedes continuar porque no hay ningun jugador!",
+                    "No hay juegos", JOptionPane.WARNING_MESSAGE);
+        }
     }
     public void verTodosJugadores(){
         try {
-            ArrayList<Jugador> jugadores
-             = jugadorDAO.obtenerTodos();
+            ArrayList<Jugador> jugadores = jugadorDAO.obtenerTodos();
             for (Jugador j : jugadores){
                 Object[] options = { "OK", "CANCEL"};
                 JOptionPane.showOptionDialog(null, j.toString(), "Continuar",
@@ -307,27 +322,33 @@ public class JugadorController {
         }
     }
     public void verPorNombre() {
-        String[] nombres = jugadorDAO.obtenerTodos().stream().map(Jugador::getNombre).toArray(String[]::new);
-        do {
-            String equipoElegido = (String) JOptionPane.showInputDialog(null,
-                    "Elija el nombre del jugador que quiere ver",
-                    "Opciones",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    nombres,
-                    nombres[0]
-            );
-            if (equipoElegido == null || equipoElegido.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(null,"El nombre no puede ser nulo");
-            }else {
+        try {
+            String[] nombres = jugadorDAO.obtenerTodos().stream().map(Jugador::getNombre).toArray(String[]::new);
+            do {
+                String equipoElegido = (String) JOptionPane.showInputDialog(null,
+                        "Elija el nombre del jugador que quiere ver",
+                        "Opciones",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        nombres,
+                        nombres[0]
+                );
+                if (equipoElegido == null || equipoElegido.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "El nombre no puede ser nulo");
+                } else {
 
-                Jugador j = jugadorDAO.obtenerTodos().stream().filter(jugador -> jugador.getNombre().equals(equipoElegido)).findFirst().orElse(null);
+                    Jugador j = jugadorDAO.obtenerTodos().stream().filter(jugador -> jugador.getNombre().equals(equipoElegido)).findFirst().orElse(null);
 
-                JOptionPane.showMessageDialog(null, Objects.requireNonNull(j).toString());
-            }
-        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar viendo jugadores?") == 0);
+                    JOptionPane.showMessageDialog(null, Objects.requireNonNull(j).toString());
+                }
+            } while (JOptionPane.showConfirmDialog(null, "Quiere continuar viendo jugadores?") == 0);
+        }catch (ArrayIndexOutOfBoundsException e){
+            JOptionPane.showMessageDialog(null, "¡No puedes continuar porque no hay ningun jugador!",
+                    "No hay juegos", JOptionPane.WARNING_MESSAGE);
+        }
     }
-    //tenemos que usar estas funciones para
+    //En caso de que tengan el mismo nombre
+    /*
     private void mostrarJugadoresRepetidos(List<Jugador> nombresIguales) {
 
         String[] opciones = nombresIguales.stream()
@@ -342,6 +363,7 @@ public class JugadorController {
             JOptionPane.showMessageDialog(null, "El jugador no puede ser nulo.");
         }
     }
+
     private String seleccionarJugadorPorApellido(String[] opciones) {
         return (String) JOptionPane.showInputDialog(
                 null,
@@ -353,6 +375,8 @@ public class JugadorController {
                 opciones[0]
         );
     }
+
+
     private void seleccionarJugador(List<Jugador> nombresIguales, String eleccion) {
 
         Jugador jugador = nombresIguales.stream()
@@ -361,4 +385,6 @@ public class JugadorController {
 
         JOptionPane.showMessageDialog(null, Objects.requireNonNull(jugador).toString());
     }
+
+     */
 }

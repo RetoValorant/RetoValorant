@@ -8,7 +8,6 @@ public class Equipo {
 
     private int codEquipo; // Código único del equipo (ej: EQ001)
     private int puntuacion; // Puntuación actual del equipo
-    private int contJugadores;
     private String nombre; // Nombre del equipo
     private LocalDate fechaFundacion; // Fecha de fundación del equipo
     private ArrayList<Jugador> listaJugadores; // Lista de jugadores del equipo
@@ -25,7 +24,6 @@ public class Equipo {
         this.nombre = nombre;
         this.fechaFundacion = fechaFundacion;
         this.puntuacion = puntuacion;
-        this.contJugadores = 0;
     }
 
     public Equipo(int codEquipo, String nombre, LocalDate fechaFundacion, int puntuacion, ArrayList<Jugador> listaJugadores) {

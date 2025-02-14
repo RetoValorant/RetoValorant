@@ -79,4 +79,15 @@ public class Enfrentamiento {
     public void setEquipo2(Equipo equipo2) {
         this.equipo2 = equipo2;
     }
+
+    @Override
+    public String toString() {
+        return  "\n Id del enfrentamiento: " + idEnfrentamiento +
+                "\n Equipo 1: " + equipo1.getNombre() +
+                "\n Equipo 2: " + equipo2.getNombre() +
+                "\n Resultados Equipo 1: " + resultadosEq1 +
+                "\n Resultados Equipo 2:" + resultadosEq2 +
+                "\n Hora del enfrentamiento: " + hora +
+                "\n Jornada: " + jornada.getNumJornada();
+    }
 }
