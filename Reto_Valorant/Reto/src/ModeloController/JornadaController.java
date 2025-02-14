@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 public class JornadaController {
@@ -32,7 +33,7 @@ public class JornadaController {
         equipoDAO = new EquipoDAO();
         enfrentamientoController = new EnfrentamientoController();
         competiciones = competicionDAO.obtenerTodasCompeticiones();
-        jornadas = new ArrayList<>(); // Asegúrate de inicializar aquí
+        jornadas = jornadaDAO.getJornadas(); // Asegúrate de inicializar aquí
         equipos = equipoDAO.obtenerTodosLosEquipos();
     }
 
@@ -41,8 +42,7 @@ public class JornadaController {
         try {
             if (equipos.size() % 2 == 0 && equiposMas2Jugadores()) {
                 crearJornada();
-                jornadas = jornadaDAO.getJornadas();
-                competicionController.actualizarCompeticion(jornadaDAO.getJornadas().getLast().getCompeticion());
+                competicionController.actualizarCompeticion(jornadas.getLast().getCompeticion());
                 resultado = false;
             } else {
                 System.out.println("La cantidad de equipos no es par");
@@ -67,8 +67,9 @@ public class JornadaController {
     private void crearJornada(){
         for (int i = 0; i < equipos.size(); i++){
             Jornada jornada = new Jornada();
-            jornada.setNumJornada(elegirNumJornada());
-            jornada.setFechaInicio(elegirFecha());
+                jornada.setNumJornada(elegirNumJornada());
+                jornada.setFechaInicio(elegirFecha());
+                jornada.setCompeticion(competicionDAO.obtenerTodasCompeticiones().getLast());
             jornadaDAO.anadirJornada(jornada);
         }
     }
@@ -76,7 +77,7 @@ public class JornadaController {
         int numJornada;
         try {
             numJornada = jornadas.getLast().getNumJornada()+1;
-        }catch (NullPointerException e){
+        }catch (NullPointerException | NoSuchElementException e){
             numJornada = 1;
         }
         return numJornada;
@@ -90,7 +91,7 @@ public class JornadaController {
             mes = fecha.getMonthValue();
             dia = fecha.getDayOfMonth();
             year = fecha.getYear();
-        }catch (NullPointerException e){
+        }catch (NullPointerException | NoSuchElementException e){
             mes = elegirMes();
             dia = elegirDiaInicial(mes);
             year = 2025;
