@@ -1,17 +1,17 @@
 #Reto_Valorant
-Este es el github para hacer el reto de valorant
+Este es el github para hacer el reto de competiciones
 
 Aquí añadiremos todo lo que hay que hacer para el reto
 
 ¿Que hace cada uno?
 
-Urko: Jugador Controller y DAO.
+Urko: Jugador Controller, DAO y diagrama de clases.
 
-Dani: Validaciones completas.
+Dani: Validaciones completas y MER.
 
-Eathan: Equipo Controller y DAO.
+Eathan: Equipo Controller, DAO, Rol controller y dao.
 
-Aaron: Enfrentamiento y Jornada Controller y DAO.
+Aaron: Enfrentamiento, Jornada, Controller, DAO, resolver errores.
 
 TRELLO:
 
