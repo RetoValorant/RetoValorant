@@ -138,7 +138,7 @@ public class JugadorController {
                 if (fechaNacimiento.isAfter(LocalDate.now())) {
                     JOptionPane.showMessageDialog(null,"La fecha de nacimiento no puede ser posterior a la fecha actual.");
 
-                } else if (period.getYears() < 16 && period.getYears() > 65) {
+                } else if (period.getYears() < 16 || period.getYears() > 65) {
                     JOptionPane.showMessageDialog(null,"La fecha de nacimiento no puede ser anterior a 1900.");
 
                 }

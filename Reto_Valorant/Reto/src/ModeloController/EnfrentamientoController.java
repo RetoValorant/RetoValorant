@@ -13,7 +13,6 @@ import java.util.*;
 
 public class EnfrentamientoController {
     private EquipoDAO equipoDAO;
-    private JornadaDAO jornadaDAO;
     private EnfrentamientoDAO enfrentamientoDAO;
     ArrayList<Enfrentamiento> enfrentamientos;
     ArrayList<Enfrentamiento> enfrentamientosMitad1;
@@ -38,7 +37,7 @@ public class EnfrentamientoController {
 
     private void declararVariables() {
         enfrentamientoDAO = new EnfrentamientoDAO();
-        jornadaDAO = new JornadaDAO();
+        JornadaDAO jornadaDAO = new JornadaDAO();
         equipoDAO = new EquipoDAO();
         enfrentamientos = enfrentamientoDAO.getEnfrentamientos();
         enfrentamientosMitad1 = new ArrayList<>();
