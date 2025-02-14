@@ -47,12 +47,10 @@ public class JuegoController {
         String var = "";
         boolean isFinished = false;
         Pattern p = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9 _-]{3,15}$"); //15 como mucho como en MER/MR
-
         do {
             try {
                 var = JOptionPane.showInputDialog(null, "Ingrese el nombre del juego");
                 Matcher matcher = p.matcher(var);
-
                 if (var.trim().isBlank()){
                     JOptionPane.showMessageDialog(null, "El nombre del juego no puede ser nulo");
                 } else if (matcher.matches()) {

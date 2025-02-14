@@ -129,7 +129,7 @@ public class EquipoController{
             }catch (NullPointerException e){
                 continuar = false;
             }
-        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar modificando equipos?") == 0);
+        }while (JOptionPane.showConfirmDialog(null,"Quiere continuar modificando equipos?") == 1);
         //sale de repetitiva
         if (continuar)
             opcionesModificar(eq);
