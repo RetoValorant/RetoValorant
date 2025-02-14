@@ -9,7 +9,13 @@ import ModeloDAO.JornadaDAO;
 
 import javax.swing.*;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class EnfrentamientoController {
     private EquipoDAO equipoDAO;
@@ -20,22 +26,15 @@ public class EnfrentamientoController {
     ArrayList<Equipo> equipos;
 
     public void crearEnfrentamientos() {
-        boolean yes;
         declararVariables();
-        do {
-            try {
-                primeraMitad();
-                segundaMitad();
-                decirEnfrentamientos();
-                yes = false;
-            } catch (IllegalArgumentException e) {
-                System.out.println("No se han encontrado equipos. " + e.getMessage());
-                yes = true;
-            }
-        } while (yes);
+        try {
+            primeraMitad();
+            segundaMitad();
+        } catch (IllegalArgumentException e) {
+            System.out.println("No se han encontrado equipos. " + e.getMessage());
+        }
     }
-
-    private void declararVariables() {
+    private void declararVariables(){
         enfrentamientoDAO = new EnfrentamientoDAO();
         JornadaDAO jornadaDAO = new JornadaDAO();
         equipoDAO = new EquipoDAO();
@@ -44,17 +43,19 @@ public class EnfrentamientoController {
         equipos = new ArrayList<>();
         jornadas = jornadaDAO.getJornadas();
     }
-
-    private void primeraMitad() {
-        for (int p = 0; p < jornadas.size() / 2; p++) {
+    private void primeraMitad(){
+        for (int p = 0; p < jornadas.size()/2; p++) {
             equipos = equipoDAO.obtenerTodosLosEquipos();
             hacerEnfrentamiento(p);
+            for(Enfrentamiento enfrentamiento : enfrentamientosMitad1){
+                equipos.add(enfrentamiento.getEquipo1());
+                equipos.add(enfrentamiento.getEquipo2());
+            }
         }
     }
-
-    private void segundaMitad() {
+    private void segundaMitad(){
         Random rand = new Random();
-        for (int p = jornadas.size() / 2; p < jornadas.size(); p++) {
+        for (int p = jornadas.size()/2; p < jornadas.size(); p++) {
             Enfrentamiento enfrentamiento = new Enfrentamiento();
             enfrentamiento.setHora(elegirHora());
             enfrentamiento.setJornada(jornadas.get(p));
@@ -65,41 +66,38 @@ public class EnfrentamientoController {
             enfrentamientoDAO.anadirEnfrentamientos(enfrentamiento);
         }
     }
-
-    private void decirEnfrentamientos() {
-        for (Enfrentamiento enfrentamiento : enfrentamientos) {
-            System.out.println(enfrentamiento.getHora() + " " + enfrentamiento.getEquipo1().getNombre() + " " +
-                    enfrentamiento.getEquipo1().getCodEquipo() + " " + enfrentamiento.getEquipo1().getFechaFundacion()
-                    + " " + enfrentamiento.getEquipo2().getNombre() + " " +
-                    enfrentamiento.getEquipo2().getCodEquipo() + " " + enfrentamiento.getEquipo2().getFechaFundacion()
-                    + " " + enfrentamiento.getJornada().getFechaInicio() + " " +
-                    enfrentamiento.getJornada().getNumJornada());
-        }
-    }
-
-    private void hacerEnfrentamiento(int p) {
-        for (int i = 0; i <= equipos.size() / 2; i++) {
+    private void hacerEnfrentamiento(int p){
+        for (int i = 0; i <= equipos.size()/2; i++) {
             Enfrentamiento enfrentamiento = new Enfrentamiento();
             enfrentamiento.setHora(elegirHora());
             enfrentamiento.setEquipo1(elegirEquipo(equipos));
             equipos.remove(enfrentamiento.getEquipo1());
-            equipoDAO.crearEquipo(enfrentamiento.getEquipo1());
 
             noSeHanEnfrentado(enfrentamiento);
 
             equipos.remove(enfrentamiento.getEquipo2());
-            equipoDAO.crearEquipo(enfrentamiento.getEquipo2());
             enfrentamiento.setJornada(jornadas.get(p));
+            enfrentamiento.setIdEnfrentamiento(generarIdEnfrentamiento());
             enfrentamientoDAO.anadirEnfrentamientos(enfrentamiento);
             enfrentamientosMitad1.add(enfrentamiento);
         }
     }
-
-    private void noSeHanEnfrentado(Enfrentamiento enfrentamiento) {
+    private int generarIdEnfrentamiento(){
+        Set<Integer> codigosEquipo = enfrentamientoDAO.getEnfrentamientos()
+                .stream().map(Enfrentamiento::getIdEnfrentamiento)
+                .collect(Collectors.toSet());
+        int idEnfrentamiento = 0;
+        while (codigosEquipo.contains(idEnfrentamiento)) {
+            idEnfrentamiento++;
+            //hasta que no encuentra un nuevo codigo no sale del loop
+        }
+        return idEnfrentamiento;
+    }
+    private void noSeHanEnfrentado(Enfrentamiento enfrentamiento){
         boolean yes = false;
         do {
             enfrentamiento.setEquipo2(elegirEquipo(equipos));
-            try {
+            try{
                 for (int j = 1; j <= enfrentamientos.size(); j++) {
                     for (int o = 0; o <= enfrentamientos.size(); o++)
                         if (o != j) {
@@ -113,158 +111,165 @@ public class EnfrentamientoController {
                             }
                         }
                 }
-            } catch (IndexOutOfBoundsException e) {
+            }catch (IndexOutOfBoundsException e){
                 System.out.println();
             }
-        } while (yes);
+        }while (yes);
     }
-
     private LocalTime elegirHora() {
         Random rand = new Random();
         int hora = rand.nextInt(15);
         return LocalTime.of(7, 0, 0).plusHours(hora);
     }
-
     private Equipo elegirEquipo(List<Equipo> equipos) {
         Random rand = new Random();
         int eq1 = rand.nextInt(equipos.size());
         return equipos.get(eq1);
     }
-
-    public void verEnfrentamientosJornada() {
-    }
-
-    public void verEnfrentamientosEquipo() {
-
-    }
-
-    public void anadirResultado() {
-            List<Equipo> equipos = equipoDAO.obtenerTodosLosEquipos();
-            List<Equipo> enfrentados = new ArrayList<>();
-
-            if (equipos.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No hay equipos disponibles.");
-                return;
-            }
-
-
-        while (enfrentados.size() < 2) {
-            String equipoSeleccionado = (String) JOptionPane.showInputDialog(
-                    null,
-                    "Seleccione un equipo:",
-                    "Equipos disponibles",
+    public void verEnfrentamientosJornada(){
+        Integer[] nombres = jornadas.stream().map(Jornada::getNumJornada).toArray(Integer[]::new);
+        do {
+            int jornadaElegida = (Integer) JOptionPane.showInputDialog(null,
+                    "Elija el numero de la jornada de la que quiere ver sus enfrentamientos",
+                    "Opciones",
                     JOptionPane.PLAIN_MESSAGE,
                     null,
-                    equipos.stream().map(Equipo::getNombre).toArray(String[]::new),
-                    null
+                    nombres,
+                    nombres[0]
             );
+            ArrayList<Enfrentamiento> en = new ArrayList<>();
+            enfrentamientos.stream().filter(enfrentamiento -> enfrentamiento.getJornada().getNumJornada() == jornadaElegida).forEach(en::add);
 
-            if (equipoSeleccionado == null) {
-                JOptionPane.showMessageDialog(null, "Debe seleccionar un equipo.");
+            for (Enfrentamiento enfrentamiento : en) {
+                Object[] options = { "OK", "CANCEL"};
+                JOptionPane.showOptionDialog(null, enfrentamiento.toString(), "Continuar",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                        null, options, options[0]);
             }
-
-            Equipo equipoEncontrado = equipos.stream()
-                    .filter(equipo -> equipo.getNombre().equals(equipoSeleccionado))
-                    .findFirst()
-                    .orElse(null);
-
-            if (!(equipoEncontrado == null) && !enfrentados.contains(equipoEncontrado)) {
-                enfrentados.add(equipoEncontrado);
-            } else {
-                JOptionPane.showMessageDialog(null, "Equipo ya seleccionado o no encontrado.");
-            }
-        }
-        resultadorFinal(enfrentados);
+        }while (JOptionPane.showConfirmDialog(null,"quiere continuar viendo enfrentamientos por jornada?") == 0);
     }
-    public void resultadorFinal(List<Equipo> enfrentados) {
-        if (enfrentados.size() != 2) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar dos equipos.");
-            return;
-        }
+    public void verEnfrentamientosEquipo(){
+        String[] nombres = equipos.stream().map(Equipo::getNombre).toArray(String[]::new);
+        do {
+            String equipoElegido = (String) JOptionPane.showInputDialog(null,
+                    "Elija el numero de la jornada de la que quiere ver sus enfrentamientos",
+                    "Opciones",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    nombres,
+                    nombres[0]
+            );
+            if (equipoElegido == null || equipoElegido.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null,"El numero no puede ser nulo");
+            }else {
+                ArrayList<Enfrentamiento> en = new ArrayList<>();
+                enfrentamientos.stream().filter(enfrentamiento -> enfrentamiento.getEquipo1().getNombre().equals(equipoElegido) || enfrentamiento.getEquipo2().getNombre().equals(equipoElegido)).forEach(en::add);
 
-        Enfrentamiento enfrentamiento = enfrentamientoDAO.getEnfrentamientoPorEquipos(enfrentados.get(0), enfrentados.get(1));
-
-        if (enfrentamiento == null) {
-            JOptionPane.showMessageDialog(null, "No se ha encontrado el enfrentamiento.");
-            return; // No se ha encontrado el enfrentamiento
-        }
-
-        String equipoSeleccionado = (String) JOptionPane.showInputDialog(null,
-                "Seleccione el equipo al que asignar el resultado:","Resultado",JOptionPane.PLAIN_MESSAGE,null,enfrentados.stream().map(Equipo::getNombre).toArray(String[]::new),enfrentados.get(0).getNombre()
-        );
-
-        if (equipoSeleccionado == null) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un equipo.");
-            return;
-        }
-
-        int resultadoPARS = -1;
-        while (resultadoPARS < 0 || resultadoPARS > 99) {
-            String resultado = JOptionPane.showInputDialog("Introduzca el resultado (0-99) para " + equipoSeleccionado + ":");
-
-            if (resultado == null) {
-                JOptionPane.showMessageDialog(null, "Debe introducir un resultado.");
-                return;
-            }
-
-            try {
-                resultadoPARS = Integer.parseInt(resultado);
-                if (resultadoPARS < 0 || resultadoPARS > 99) {
-                    JOptionPane.showMessageDialog(null,"Teclea un resultado válido (0-99).");
+                for (Enfrentamiento enfrentamiento : en) {
+                    Object[] options = { "OK", "CANCEL"};
+                    JOptionPane.showOptionDialog(null, enfrentamiento.toString(), "Continuar",
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                            null, options, options[0]);
                 }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Teclea un número válido " +e.getMessage());
             }
-        }
-
-        if (equipoSeleccionado.equals(enfrentados.getFirst().getNombre())) {
-            enfrentamiento.setResultadosEq1(resultadoPARS);
-        } else {
-            enfrentamiento.setResultadosEq2(resultadoPARS);
-        }
-
-        enfrentamientoDAO.anadirEnfrentamientos(enfrentamiento);
+        }while (JOptionPane.showConfirmDialog(null,"quiere continuar viendo enfrentamientos por equipo?") == 0);
     }
-
-    public void verPuntuacionEquipo(){
-        List<Equipo> equipos = equipoDAO.obtenerTodosLosEquipos();
-
-        if (equipos.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No hay equipos disponibles.");
-            return;
-        }
-
-        String equipoSeleccionado = (String) JOptionPane.showInputDialog(
-                null,
-                "Seleccione un equipo:",
-                "Equipos disponibles",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                equipos.stream().map(Equipo::getNombre).toArray(String[]::new),
-                null
-        );
-
-        if (equipoSeleccionado == null) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un equipo.");
-            return;
-        }
-
-        Equipo equipoEncontrado = equipos.stream()
-                .filter(equipo -> equipo.getNombre().equals(equipoSeleccionado))
-                .findFirst()
-                .orElse(null);
-
-        if (equipoEncontrado == null) {
-            JOptionPane.showMessageDialog(null, "Equipo no encontrado.");
-            return;
-        }
-
-        int puntuacion = enfrentamientoDAO.getEnfrentamientos().stream()
-                .filter(enfrentamiento -> enfrentamiento.getEquipo1().equals(equipoEncontrado) || enfrentamiento.getEquipo2().equals(equipoEncontrado))
-                .mapToInt(enfrentamiento -> enfrentamiento.getEquipo1().equals(equipoEncontrado) ? enfrentamiento.getResultadosEq1() : enfrentamiento.getResultadosEq2())
-                .sum();
-
-        JOptionPane.showMessageDialog(null, "Puntuación de " + equipoEncontrado.getNombre() + ": " + puntuacion);
+    public void anadirResultado(){
+        ArrayList<Enfrentamiento> en = conseguirEq1();
+        Enfrentamiento enfrentamiento = conseguirEq2(en);
+        ponerResultados(enfrentamiento);
     }
+    private ArrayList<Enfrentamiento> conseguirEq1() {
+        String[] nombres = equipos.stream().map(Equipo::getNombre).toArray(String[]::new);
+        ArrayList<Enfrentamiento> en = new ArrayList<>();
+        boolean fallo;
+        do {
+            String equipoElegido = (String) JOptionPane.showInputDialog(null,
+                    "¿Cual es el primer equipo?",
+                    "Opciones",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    nombres,
+                    nombres[0]
+            );
+            if (equipoElegido == null || equipoElegido.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null,"El numero no puede ser nulo");
+                fallo = true;
+            }else {
+                enfrentamientos.stream().filter(enfrentamiento -> enfrentamiento.getEquipo1().getNombre().equals(equipoElegido)).forEach(en::add);
+                fallo = false;
+            }
+        }while (fallo);
+        return en;
+    }
+    private Enfrentamiento conseguirEq2(ArrayList<Enfrentamiento> en) {
+        ArrayList<String> nombresList = new ArrayList<>();
+        for(int i = 0; i < en.size(); i++) {
+            equipos.stream().map(Equipo::getNombre).forEach(nombresList::add);
+        }
+        //es necesario este for? .add añade en la siguiente posicion libre
+        String[] nombres = new String[nombresList.size()];
+        for (int i = 0; i < nombresList.size(); i++) {
+            nombres[i] = nombresList.get(i);
+        }
+        //este for igual, podemos usar LAMBDA
 
+        Enfrentamiento enfrentamientoReturn = new Enfrentamiento();
+        boolean fallo;
+        do {
+            String equipoElegido = (String) JOptionPane.showInputDialog(null,
+                    "¿Cual es el segundo equipo?",
+                    "Opciones",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    nombres,
+                    nombres[0]
+            );
+            if (equipoElegido == null || equipoElegido.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null,"El numero no puede ser nulo");
+                fallo = true;
+            }else {
+                enfrentamientoReturn = en.stream().filter(enfrentamiento -> enfrentamiento.getEquipo2().getNombre().equals(equipoElegido)).findFirst().orElse(null);
+                fallo = false;
+            }
+        }while (fallo);
+        return enfrentamientoReturn;
+    }
+    private void ponerResultados(Enfrentamiento enfrentamiento){
+        boolean isValid = false;
+        Pattern pattern = Pattern.compile("^[0-9]{2}-[0-9]{2}$");
+        String var;
+        int resultadoEq1 = 0;
+        int resultadoEq2 = 0;
+        do {
+            try {
+                var = JOptionPane.showInputDialog(null,"Dime el resultado del partido en el siguiente formato: " + pattern);
+                Matcher matcher = pattern.matcher(var);
+                if (matcher.matches()) {
+                    resultadoEq1 = Integer.parseInt(var.substring(0,2));
+                    resultadoEq2 = Integer.parseInt(var.substring(3,5));
+                    if (resultadoEq1 == resultadoEq2) {
+                        JOptionPane.showMessageDialog(null,"Los equipos no pueden empatar");
+                    }else if (resultadoEq1 > 13 || resultadoEq2 > 13) {
+                        if (resultadoEq1-resultadoEq2 != 2 && resultadoEq2-resultadoEq1 != 2) {
+                            JOptionPane.showMessageDialog(null, "Si los equipos han hecho mas de 12 rondas, tiene que haber diferencia de 2 rondas ganadas entre ellos.");
+                        }else
+                            isValid = true;
+                    }else
+                        isValid = true;
+                }else {
+                    System.out.println("El resultado no utiliza un formato valido");
+                }
+
+            }catch (NullPointerException e){
+                System.out.println("No se puede ingresar el resultado vacio");
+            }
+        }while (!isValid);
+        enfrentamiento.setResultadosEq1(resultadoEq1);
+        enfrentamiento.setResultadosEq2(resultadoEq2);
+        if (enfrentamiento.getResultadosEq1() > enfrentamiento.getResultadosEq2())
+            enfrentamiento.getEquipo1().setPuntuacion(enfrentamiento.getEquipo1().getPuntuacion()+1);
+        else
+            enfrentamiento.getEquipo2().setPuntuacion(enfrentamiento.getEquipo2().getPuntuacion()+1);
+    }
 }
