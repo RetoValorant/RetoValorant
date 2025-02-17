@@ -1,20 +1,37 @@
 package Modelo;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Juego {
 
     private int codjuego;
     private String nombre;
     private LocalDate fechaSalida;
+    private ArrayList<Rol> listaRoles;
 
     public Juego() {
+    }
+
+    public Juego(int codjuego, String nombre, LocalDate fechaSalida, ArrayList<Rol> listaRoles) {
+        this.codjuego = codjuego;
+        this.nombre = nombre;
+        this.fechaSalida = fechaSalida;
+        this.listaRoles = listaRoles;
     }
 
     public Juego(int codjuego, String nombre, LocalDate fechaSalida) {
         this.codjuego = codjuego;
         this.nombre = nombre;
         this.fechaSalida = fechaSalida;
+    }
+
+    public ArrayList<Rol> getListaRoles() {
+        return listaRoles;
+    }
+
+    public void setListaRoles(ArrayList<Rol> listaRoles) {
+        this.listaRoles = listaRoles;
     }
 
     public int getCodjuego() {
@@ -47,16 +64,13 @@ public class Juego {
         sb.append("Nombre: " + getNombre()+"\n" +
                 "Codigo de equipo: " + getCodjuego() + "\n" +
                 "Fecha de fundacion: " + getFechaSalida());
-        /*
-        if (!listaJugadores.isEmpty()) {
-            for (Jugador jugador : getListaJugadores()) {
-                sb.append("\nNickname: " + jugador.getNickname());
+        if (listaRoles != null) {
+            sb.append("\nRoles: ");
+            for (Rol rol : listaRoles) {
+                sb.append("\n" + rol.getRol() + ", ");
             }
-        }else
-            sb.append("\nNo hay jugadores");
+        }
 
-            AQUI LOS ROLES
-         */
         return sb.toString();
     }
 }
