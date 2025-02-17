@@ -2,6 +2,7 @@ package ModeloController;
 
 import Modelo.Juego;
 import ModeloDAO.JuegoDAO;
+import ModeloDAO.RolDAO;
 
 import javax.swing.*;
 import java.time.LocalDate;
@@ -17,15 +18,19 @@ import java.util.stream.Collectors;
 
 public class JuegoController {
     private static JuegoDAO juegoDAO;
+    private static RolController rolController;
     private static final LocalDate SALIDAPRIMERJUEGO = LocalDate.of(1972,11,29);
 
-    public JuegoController() {juegoDAO = new JuegoDAO();}
+    public JuegoController() {
+        rolController = new RolController();
+        juegoDAO = new JuegoDAO();}
 
     public void anadirJuego() {
         Juego juego = new Juego();
             juego.setCodjuego(generarCodJuego());
             juego.setNombre(validarNombre());
             juego.setFechaSalida(validarFechaSalida());
+            juego.setListaRoles(rolController.conseguirRoles());
         juegoDAO.crearJuego(juego);
     }
     private int generarCodJuego() {
